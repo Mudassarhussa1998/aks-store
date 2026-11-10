@@ -71,7 +71,7 @@ h1, h2, h3 { letter-spacing: -0.022em; }
 .lift:hover { box-shadow: 0 8px 28px rgb(0 0 0 / 0.08); }
 
 .arrow-nudge svg { transition: transform 0.25s ease; }
-.arrow-nudge:hover svg { transform: translateX(4px); }
+.arrow-nudge:hover svg, .group:hover .arrow-nudge svg { transform: translateX(4px); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

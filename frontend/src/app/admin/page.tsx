@@ -43,6 +43,7 @@ async function StatTiles() {
     { label: "Low stock variants", value: String(s.low_stock_variants), note: "3 or fewer left", tone: "text-sale", href: "/admin/inventory" },
     { label: "Customers", value: String(s.customers), note: "Registered accounts", tone: "text-muted", href: "/admin/customers" },
     { label: "Hidden reviews", value: String(s.pending_reviews), note: "Unpublished", tone: "text-muted", href: "/admin/reviews" },
+    { label: "Unread messages", value: String(s.unread_messages), note: "From the Contact page", tone: s.unread_messages ? "text-sale" : "text-muted", href: "/admin/messages" },
   ];
   return (
     <div className="mb-6 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">

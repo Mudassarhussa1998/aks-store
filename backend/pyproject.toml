@@ -1,7 +1,7 @@
 [project]
-name = "aks-api"
+name = "rawaj-api"
 version = "0.1.0"
-description = "Aks.pk e-commerce API"
+description = "Rawaj.pk e-commerce API"
 
 authors = [
     { name = "mudassarhussain", email = "mudassarhussa1998@gmail.com" }
@@ -15,7 +15,7 @@ dependencies = [
     "pillow>=13.0.0",
     "pwdlib[argon2]>=0.3.1",
     "pydantic-settings>=2.6",
-    "pyjwt>=2.15.1",
+    "pyjwt[crypto]>=2.15.1",
     "python-multipart>=0.0.33",
     "redis>=5.2",
     "sqlalchemy[asyncio]>=2.0.36",

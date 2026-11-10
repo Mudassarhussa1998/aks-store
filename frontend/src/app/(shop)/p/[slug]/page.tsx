@@ -6,7 +6,9 @@ import { Suspense } from "react";
 import { ProductGrid } from "@/components/product/product-card";
 import { ProductView } from "@/components/product/product-view";
 import { ReviewForm, ReviewList } from "@/components/product/reviews";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getProduct, getRelated, getReviews, listProducts } from "@/lib/catalog";
+import { breadcrumbJsonLd, categoryTrail, productJsonLd, summary } from "@/lib/seo";
 import { getCurrentUser } from "@/lib/session";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -19,10 +21,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await getProduct((await params).slug);
   if (!p) return {};
+  const from = Math.min(...p.variants.map((v) => v.price));
+  const description = summary(`${p.name} from Rs ${from.toLocaleString("en-PK")}. ${p.description} Cash on Delivery across Pakistan.`);
+  const images = p.images.slice(0, 4).map((i) => ({ url: `${i.url}-1080.webp`, alt: i.alt || p.name }));
   return {
-    title: p.name,
-    description: p.description.slice(0, 160),
-    openGraph: { images: p.images[0] ? [`${p.images[0].url}-1080.webp`] : [] },
+    title: `${p.name} — ${p.category.name}`,
+    description,
+    alternates: { canonical: `/p/${p.slug}` },
+    openGraph: { title: p.name, description, url: `/p/${p.slug}`, images },
+    twitter: { card: "summary_large_image", title: p.name, description, images: images.map((i) => i.url) },
   };
 }
 
@@ -59,6 +66,8 @@ async function Product({ slug }: { slug: string }) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-6 pb-16">
+      <JsonLd data={productJsonLd(product, reviews.items)} />
+      <JsonLd data={breadcrumbJsonLd([...categoryTrail(product.breadcrumbs), { name: product.name, path: `/p/${product.slug}` }])} />
       <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap gap-2 text-[13px] text-muted">
         <Link href="/">Home</Link>
         {product.breadcrumbs.map((c) => (

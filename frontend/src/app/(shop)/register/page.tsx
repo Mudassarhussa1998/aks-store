@@ -3,6 +3,7 @@ import { Suspense } from "react";
 
 import { RegisterForm } from "@/components/account/auth-forms";
 import { AuthShell, AuthSkeleton } from "@/components/account/auth-shell";
+import { SocialButtons } from "@/components/account/social-buttons";
 
 export const metadata: Metadata = { title: "Create account", robots: { index: false } };
 
@@ -11,7 +12,10 @@ export default function RegisterPage({ searchParams }: { searchParams: Promise<{
     <AuthShell title="Create your account" subtitle="Faster checkout, order history and a wishlist that follows you.">
       <Suspense fallback={<AuthSkeleton rows={4} />}>
         {searchParams.then(({ next }) => (
-          <RegisterForm next={next ?? "/account"} />
+          <>
+            <SocialButtons next={next ?? "/account"} google facebook verb="Sign up" />
+            <RegisterForm next={next ?? "/account"} />
+          </>
         ))}
       </Suspense>
     </AuthShell>

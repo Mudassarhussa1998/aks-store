@@ -20,8 +20,8 @@ export function ProfileForm({ user, notice }: { user: User; notice?: string }) {
       {notice && <Notice tone="ok">{notice}</Notice>}
       <PersonalDetails user={user} />
       <ContactDetails user={user} />
-      <PasswordCard />
-      <DeleteAccountCard />
+      <PasswordCard hasPassword={user.has_password} />
+      <DeleteAccountCard hasPassword={user.has_password} />
     </div>
   );
 }
@@ -158,25 +158,34 @@ function Status({ verified, href }: { verified: boolean; href: string }) {
   );
 }
 
-function PasswordCard() {
+function PasswordCard({ hasPassword }: { hasPassword: boolean }) {
   const { message, pending, run } = useSaver();
   const [key, setKey] = useState(0); // remount to clear the fields after a change
   return (
-    <Card title="Password" text="Changing it signs you out on every other device.">
+    <Card
+      title="Password"
+      text={
+        hasPassword
+          ? "Changing it signs you out on every other device."
+          : "You sign in with Google or Facebook. Set a password if you'd also like to sign in with your email or mobile number."
+      }
+    >
       <form
         key={key}
         className="grid gap-5 sm:grid-cols-2"
         action={(form) =>
           run(async () => {
-            const res = await changePassword(String(form.get("current")), String(form.get("new")));
+            const res = await changePassword(String(form.get("current") ?? ""), String(form.get("new")));
             if (res.ok) setKey((k) => k + 1);
             return res;
-          }, "Password changed. Other devices have been signed out.")
+          }, hasPassword ? "Password changed. Other devices have been signed out." : "Password set. You can now also sign in with it.")
         }
       >
-        <Field label="Current password">
-          <PasswordInput name="current" required autoComplete="current-password" />
-        </Field>
+        {hasPassword && (
+          <Field label="Current password">
+            <PasswordInput name="current" required autoComplete="current-password" />
+          </Field>
+        )}
         <Field label="New password" hint="At least 8 characters">
           <PasswordInput name="new" required minLength={8} autoComplete="new-password" />
         </Field>
@@ -185,15 +194,15 @@ function PasswordCard() {
             <Notice tone={message.ok ? "ok" : "error"}>{message.text}</Notice>
           </div>
         )}
-        <button disabled={pending} className={saveButton}>
-          {pending ? "Saving…" : "Change password"}
+        <button disabled={pending} className={`${saveButton} sm:col-start-1`}>
+          {pending ? "Saving…" : hasPassword ? "Change password" : "Set password"}
         </button>
       </form>
     </Card>
   );
 }
 
-function DeleteAccountCard() {
+function DeleteAccountCard({ hasPassword }: { hasPassword: boolean }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -209,14 +218,16 @@ function DeleteAccountCard() {
           action={(form) =>
             start(async () => {
               setError(null);
-              const res = await deleteAccount(String(form.get("password")));
+              const res = await deleteAccount(String(form.get("password") ?? ""));
               if (!res.ok) setError(res.error); // on success the action signs out and redirects
             })
           }
         >
-          <Field label="Enter your password to confirm">
-            <PasswordInput name="password" required autoComplete="current-password" />
-          </Field>
+          {hasPassword && (
+            <Field label="Enter your password to confirm">
+              <PasswordInput name="password" required autoComplete="current-password" />
+            </Field>
+          )}
           <label className="flex cursor-pointer items-start gap-3 text-sm">
             <input type="checkbox" required className="mt-0.5 h-[18px] w-[18px] accent-sale" />
             I understand this can&apos;t be undone.

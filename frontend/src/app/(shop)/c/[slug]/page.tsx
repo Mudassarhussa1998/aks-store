@@ -5,7 +5,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { Listing, ListingSkeleton, parseQuery, type SearchParams } from "@/components/listing/listing";
+import { JsonLd } from "@/components/seo/json-ld";
+import { CATEGORY_COPY } from "@/content/seo";
 import { findCategory, getCategories } from "@/lib/catalog";
+import { breadcrumbJsonLd, categoryTrail, summary } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<SearchParams> };
 
@@ -17,7 +20,19 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const hit = findCategory(await getCategories(), slug);
-  return hit ? { title: hit.node.name, description: `Shop ${hit.node.name.toLowerCase()} at Aks.pk — ${hit.node.description}. Cash on Delivery across Pakistan.` } : {};
+  if (!hit) return {};
+  const { node } = hit;
+  const copy = CATEGORY_COPY[node.slug];
+  const description = summary(
+    copy?.paragraphs[0] ??
+      `Shop ${node.name.toLowerCase()} online at Rawaj.pk${node.description ? ` — ${node.description.toLowerCase()}` : ""}. Fair prices, Cash on Delivery and 7-day returns across Pakistan.`,
+  );
+  return {
+    title: `${node.name} — Shop Online in Pakistan`,
+    description,
+    alternates: { canonical: `/c/${node.slug}` }, // filtered and sorted views point back to the plain category
+    openGraph: { title: `${node.name} · Rawaj.pk`, description, url: `/c/${node.slug}`, images: node.image_url ? [{ url: `${node.image_url}-1080.webp`, alt: node.name }] : undefined },
+  };
 }
 
 // The slug is read inside Suspense so the route can also be rebuilt at runtime after the catalog changes.
@@ -35,9 +50,11 @@ async function Category({ slug, searchParams }: { slug: string; searchParams: Pr
   const hit = findCategory(await getCategories(), slug);
   if (!hit) notFound();
   const { node, path } = hit;
+  const copy = CATEGORY_COPY[node.slug];
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-6 pb-16">
+      <JsonLd data={breadcrumbJsonLd(categoryTrail(path))} />
       <nav aria-label="Breadcrumb" className="flex flex-wrap gap-2 text-[13px] text-muted">
         <Link href="/">Home</Link>
         {path.map((c, i) => (
@@ -70,6 +87,29 @@ async function Category({ slug, searchParams }: { slug: string; searchParams: Pr
           <Listing base={{ category: slug }} query={parseQuery(sp)} searchParams={sp} basePath={`/c/${slug}`} />
         ))}
       </Suspense>
+      {copy && (
+        <section className="mt-16 border-t border-line pt-10">
+          <h2 className="text-2xl font-semibold">{copy.heading}</h2>
+          <div className="mt-4 flex max-w-3xl flex-col gap-3 text-[15px] leading-relaxed text-body">
+            {copy.paragraphs.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
+          {node.children.length > 0 && (
+            <p className="mt-5 text-[15px] text-body">
+              Shop by type:{" "}
+              {node.children.map((c, i) => (
+                <span key={c.slug}>
+                  {i > 0 && " · "}
+                  <Link href={`/c/${c.slug}`} className="text-forest underline underline-offset-2">
+                    {c.name}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          )}
+        </section>
+      )}
     </div>
   );
 }

@@ -10,7 +10,7 @@ import httpx
 
 from app.core.config import settings
 
-log = logging.getLogger("aks.notify")
+log = logging.getLogger("rawaj.notify")
 
 # Messages sent by the console providers, newest last. Lets tests (and local debugging) read codes.
 outbox: deque[dict] = deque(maxlen=50)
@@ -53,13 +53,13 @@ async def send_sms(to: str, text: str) -> None:
 def code_email(code: str, purpose: str) -> tuple[str, str, str]:
     """Subject, plain text and HTML for an email carrying a one-time code."""
     action = "reset your password" if purpose == "reset_password" else "verify your email"
-    subject = f"{code} is your Aks.pk code"
+    subject = f"{code} is your Rawaj.pk code"
     text = (
-        f"Your Aks.pk code is {code}. Use it to {action}.\n\n"
+        f"Your Rawaj.pk code is {code}. Use it to {action}.\n\n"
         f"It expires in {settings.otp_minutes} minutes. If you didn't ask for this, you can ignore this email."
     )
     html = f"""<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:480px;margin:auto;padding:24px;color:#1d1d1f">
-  <p style="font-size:20px;font-weight:600;letter-spacing:.08em;margin:0 0 24px">AKS<span style="font-size:12px;color:#5f5f5f;letter-spacing:0">.pk</span></p>
+  <p style="margin:0 0 24px"><img src="{settings.site_url}/brand/seal-email.png" width="64" height="64" alt="Rawaj.pk" style="display:block;border:0"></p>
   <p style="font-size:16px;margin:0 0 16px">Use this code to {action}:</p>
   <p style="font-size:34px;font-weight:600;letter-spacing:.3em;margin:0 0 16px">{code}</p>
   <p style="font-size:14px;color:#5f5f5f;margin:0">It expires in {settings.otp_minutes} minutes. If you didn't ask for this, you can ignore this email.</p>
@@ -69,4 +69,4 @@ def code_email(code: str, purpose: str) -> tuple[str, str, str]:
 
 def code_sms(code: str, purpose: str) -> str:
     action = "reset your password" if purpose == "reset_password" else "verify your phone"
-    return f"{code} is your Aks.pk code to {action}. It expires in {settings.otp_minutes} minutes. Don't share it with anyone."
+    return f"{code} is your Rawaj.pk code to {action}. It expires in {settings.otp_minutes} minutes. Don't share it with anyone."

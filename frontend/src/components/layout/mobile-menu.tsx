@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
+import { Logo } from "../brand/logo";
 import { BagIcon, ChevronDown, ChevronRight, CloseIcon, HeartIcon, MenuIcon, PackageIcon, UserIcon } from "../ui/icons";
 
 export type MenuCategory = {
@@ -68,10 +69,7 @@ export function MobileMenu({ categories }: { categories: MenuCategory[] }) {
               className={`relative flex h-full w-[340px] max-w-[88vw] flex-col bg-white shadow-xl transition-transform duration-300 ease-out ${open ? "translate-x-0" : "-translate-x-full"}`}
             >
               <div className="flex items-center justify-between border-b border-line px-5 py-3">
-                <Link href="/" onClick={close} className="text-xl font-semibold tracking-[0.08em]">
-                  AKS
-                  <span className="text-xs tracking-normal text-muted">.pk</span>
-                </Link>
+                <Logo size="sm" onClick={close} />
                 <button
                   type="button"
                   aria-label="Close menu"

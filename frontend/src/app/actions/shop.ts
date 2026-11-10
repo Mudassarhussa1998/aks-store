@@ -52,6 +52,21 @@ export async function cancelOrder(number: string, reason: string, phone?: string
   return result;
 }
 
+export type ContactInput = {
+  topic: string;
+  name: string;
+  email: string;
+  phone: string;
+  order_number: string;
+  message: string;
+  website: string; // honeypot
+};
+
+export async function sendContact(input: ContactInput) {
+  const token = await getToken();
+  return run(() => api<{ detail: string }>("/contact", { method: "POST", token, body: input }));
+}
+
 export async function searchSuggest(q: string) {
   if (q.trim().length < 2) return [] as ProductCard[];
   try {

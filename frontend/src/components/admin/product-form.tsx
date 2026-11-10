@@ -76,7 +76,7 @@ export function ProductForm({ product, categories }: { product?: AdminProduct; c
   const fileInput = useRef<HTMLInputElement>(null);
 
   const colorList = parseColors(colors);
-  const skuPrefix = prefix || `AKS-${code(slug.split("-").map((w) => w[0]).join(""), 4) || "PRD"}`;
+  const skuPrefix = prefix || `RWJ-${code(slug.split("-").map((w) => w[0]).join(""), 4) || "PRD"}`;
 
   function onName(value: string) {
     setName(value);
@@ -226,7 +226,7 @@ export function ProductForm({ product, categories }: { product?: AdminProduct; c
                 setSlug(slugify(e.target.value));
               }}
             />
-            <span className="text-xs font-normal text-muted">aks.pk/p/{slug || "…"}</span>
+            <span className="text-xs font-normal text-muted">rawaj.pk/p/{slug || "…"}</span>
           </label>
           <label className={labelClass}>
             Category

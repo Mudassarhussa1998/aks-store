@@ -9,6 +9,19 @@ export type Stats = {
   low_stock_variants: number;
   customers: number;
   pending_reviews: number;
+  unread_messages: number;
+};
+
+export type ContactMessage = {
+  id: number;
+  topic: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  order_number: string | null;
+  message: string;
+  is_read: boolean;
+  created_at: string;
 };
 
 export type AdminProduct = ProductDetail & { is_active: boolean; is_featured: boolean; category_id: number };

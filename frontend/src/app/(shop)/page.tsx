@@ -1,16 +1,22 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { cacheLife, cacheTag } from "next/cache";
 import { Suspense } from "react";
 
 import { AccountNotice } from "@/components/home/account-notice";
+import { JsonLd } from "@/components/seo/json-ld";
+import { HeroVideo } from "@/components/home/hero-video";
 import { NewArrivalsTabs } from "@/components/home/new-arrivals";
 import { ProductGrid } from "@/components/product/product-card";
-import { CashIcon, ChatIcon, ChevronRight, ReturnIcon, Stars, TruckIcon } from "@/components/ui/icons";
+import { CashIcon, ChatIcon, CheckIcon, ChevronRight, ReturnIcon, Stars, TruckIcon } from "@/components/ui/icons";
 import { CATEGORY_ROW, CLOTHING_ROOTS, COMFORT, HERO, REVIEW_PRODUCTS, TILES } from "@/content/home";
 import { getCategories, getProduct, getReviews, listProducts } from "@/lib/catalog";
 import { rs } from "@/lib/format";
+import { organizationJsonLd } from "@/lib/seo";
 import type { Category, ProductDetail } from "@/lib/types";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 async function getHomeData() {
   "use cache";
@@ -46,52 +52,86 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={organizationJsonLd()} />
       <Suspense fallback={null}>
         <AccountNotice />
       </Suspense>
-      <section className="bg-mist">
-        <div className="mx-auto max-w-7xl px-4 pt-16 pb-12 text-center md:pt-24 md:pb-16">
-          <p className="animate-rise text-[15px] font-semibold text-forest">{HERO.eyebrow}</p>
-          <h1 className="mx-auto mt-3 max-w-4xl animate-rise text-[clamp(40px,7vw,80px)] leading-[1.04] font-semibold tracking-[-0.035em] [animation-delay:60ms]">
-            {HERO.title}
-          </h1>
-          <p className="mx-auto mt-5 max-w-xl animate-rise text-lg leading-relaxed text-muted [animation-delay:120ms] md:text-xl">{HERO.text}</p>
-          <div className="mt-8 flex animate-rise flex-wrap items-center justify-center gap-x-7 gap-y-3 [animation-delay:180ms]">
-            <Link href={HERO.cta.href} className="rounded-full bg-forest px-7 py-3.5 text-[15px] font-medium text-white transition-colors hover:bg-[#16302a] hover:text-white">
-              {HERO.cta.label}
-            </Link>
-            <Link href={HERO.link.href} className="arrow-nudge inline-flex items-center gap-1 text-[17px] text-forest hover:underline">
-              {HERO.link.label}
-              <ChevronRight size={14} />
-            </Link>
+      <section aria-label="Winter collection" className="relative isolate flex h-[calc(100svh-104px)] min-h-[560px] max-h-[880px] overflow-hidden bg-sand">
+        <HeroVideo wide={HERO.video.wide} tall={HERO.video.tall} />
+        {/* Cream wash keeps the dark headline readable over the moving fabric. */}
+        <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#f4f1ec] via-[#f4f1ec]/55 to-[#f4f1ec]/5 md:bg-gradient-to-r md:from-[#f4f1ec]/95 md:via-[#f4f1ec]/60 md:to-transparent" />
+
+        <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-end px-4 pb-10 md:justify-center md:pb-0">
+          <div className="max-w-2xl">
+            <p className="inline-flex animate-rise items-center gap-2 rounded-full bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-forest backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-forest" />
+              {HERO.eyebrow}
+            </p>
+            <h1 className="mt-5 animate-rise text-[clamp(44px,7.5vw,104px)] leading-[0.98] font-semibold tracking-[-0.045em] [animation-delay:80ms]">
+              {HERO.title}
+            </h1>
+            <p className="mt-5 max-w-md animate-rise text-[17px] leading-relaxed text-body [animation-delay:160ms] md:text-xl">{HERO.text}</p>
+            <div className="mt-8 flex animate-rise flex-wrap items-center gap-3 [animation-delay:240ms]">
+              <Link href={HERO.cta.href} className="arrow-nudge inline-flex h-12 items-center gap-2 rounded-full bg-forest px-7 text-[15px] font-medium text-white transition-colors hover:bg-[#16302a] hover:text-white">
+                {HERO.cta.label}
+                <ChevronRight size={14} />
+              </Link>
+              <Link href={HERO.link.href} className="inline-flex h-12 items-center rounded-full border border-ink/15 bg-white/60 px-7 text-[15px] font-medium backdrop-blur transition-colors hover:bg-white">
+                {HERO.link.label}
+              </Link>
+            </div>
+            <ul className="mt-10 hidden animate-fade flex-wrap gap-x-6 gap-y-2 text-[13px] text-body [animation-delay:400ms] sm:flex">
+              {HERO.points.map((point) => (
+                <li key={point} className="flex items-center gap-2">
+                  <CheckIcon size={15} className="text-forest" />
+                  {point}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
+      </section>
 
-        <div className="mx-auto max-w-7xl pb-16 md:px-4">
-          <div className="flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible md:px-0">
-            {HERO.cards.map((c, i) => (
+      <section className="pt-4 md:pt-6">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 pb-16 md:h-[620px] md:grid-cols-[1.3fr_1fr] md:grid-rows-2 md:gap-4">
+          {HERO.cards.map((c, i) => {
+            const feature = i === 0;
+            return (
               <Link
                 key={c.href}
                 href={c.href}
-                className="zoom relative aspect-[4/5] w-[78%] shrink-0 animate-fade snap-start overflow-hidden rounded-3xl bg-line md:w-auto"
+                className={`zoom group relative animate-fade overflow-hidden rounded-3xl bg-line ${
+                  feature ? "col-span-2 aspect-[4/5] sm:aspect-[4/3] md:col-span-1 md:row-span-2 md:aspect-auto" : "aspect-square md:aspect-auto"
+                }`}
                 style={{ animationDelay: `${240 + i * 80}ms` }}
               >
                 {image(c.product) && (
-                  <Image src={image(c.product)!} alt="" fill priority={i === 0} sizes="(max-width: 768px) 78vw, 33vw" className="object-cover" />
+                  <Image
+                    src={image(c.product)!}
+                    alt=""
+                    fill
+                    priority={feature}
+                    sizes={feature ? "(max-width: 768px) 100vw, 56vw" : "(max-width: 768px) 50vw, 44vw"}
+                    className={`object-cover ${feature ? "object-top" : ""}`}
+                  />
                 )}
-                <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent" />
-                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-6 text-white">
-                  <span className="flex flex-col">
-                    <span className="text-2xl font-semibold tracking-tight">{c.title}</span>
-                    <span className="text-[15px] text-white/85">{c.text}</span>
-                  </span>
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/90 text-ink">
-                    <ChevronRight size={14} />
+                <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                <span className={`absolute inset-x-0 bottom-0 flex flex-col items-start text-white ${feature ? "gap-2 p-6 md:p-10" : "gap-1 p-4 md:p-7"}`}>
+                  <span className="text-[13px] font-medium text-white/80">{c.label}</span>
+                  <span className={`leading-tight font-semibold tracking-tight ${feature ? "text-3xl md:text-5xl" : "text-lg md:text-[28px]"}`}>{c.title}</span>
+                  <span className={`text-white/85 ${feature ? "text-[15px] md:text-lg" : "hidden text-[15px] md:block"}`}>{c.text}</span>
+                  <span
+                    className={`arrow-nudge mt-2 inline-flex items-center gap-1.5 rounded-full bg-white font-medium text-ink transition-colors group-hover:bg-sand ${
+                      feature ? "px-5 py-2.5 text-[15px] md:mt-4" : "px-3.5 py-1.5 text-[13px] md:px-4 md:py-2 md:text-sm"
+                    }`}
+                  >
+                    {c.cta}
+                    <ChevronRight size={13} />
                   </span>
                 </span>
               </Link>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </section>
 
@@ -100,7 +140,7 @@ export default async function HomePage() {
         <div className="-mx-4 flex gap-5 overflow-x-auto px-4 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-8 md:overflow-visible md:px-0">
           {row.map((c) => (
             <Link key={c.slug} href={`/c/${c.slug}`} className="group flex w-24 shrink-0 flex-col items-center gap-3 text-center md:w-auto">
-              <span className="zoom relative aspect-square w-full overflow-hidden rounded-2xl bg-mist">
+              <span className="zoom relative aspect-square w-full max-w-36 overflow-hidden rounded-full bg-mist ring-offset-4 transition-shadow group-hover:ring-2 group-hover:ring-forest">
                 {c.image_url && <Image src={c.image_url} alt="" fill sizes="(max-width: 768px) 96px, 12vw" className="object-cover" />}
               </span>
               <span className="text-sm font-medium group-hover:text-forest">{c.name}</span>
@@ -197,7 +237,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      <section className="border-b border-line">
+      <section>
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { Icon: CashIcon, title: "Cash on Delivery", text: "Pay when your parcel arrives." },

@@ -12,6 +12,7 @@ from app.api.routes.catalog import _review_out
 from app.core.cache import invalidate
 from app.models import (
     Category,
+    ContactMessage,
     Coupon,
     Order,
     OrderItem,
@@ -53,6 +54,7 @@ async def stats(_: AdminUser, db: DB):
         low_stock_variants=await db.scalar(select(func.count(Variant.id)).where(Variant.stock <= LOW_STOCK)) or 0,
         customers=await db.scalar(select(func.count(User.id)).where(User.is_admin.is_(False))) or 0,
         pending_reviews=await db.scalar(select(func.count(Review.id)).where(Review.is_published.is_(False))) or 0,
+        unread_messages=await db.scalar(select(func.count(ContactMessage.id)).where(ContactMessage.is_read.is_(False))) or 0,
     )
 
 
@@ -615,6 +617,28 @@ async def update_coupon(coupon_id: int, data: schemas.CouponIn, _: AdminUser, db
         setattr(c, k, v)
     await db.commit()
     return c
+
+
+# ---------- contact messages ----------
+
+
+@router.get("/messages", response_model=list[schemas.ContactMessageOut])
+async def messages(_: AdminUser, db: DB, unread: bool = False, topic: str | None = None):
+    stmt = select(ContactMessage).order_by(ContactMessage.created_at.desc()).limit(200)
+    if unread:
+        stmt = stmt.where(ContactMessage.is_read.is_(False))
+    if topic:
+        stmt = stmt.where(ContactMessage.topic == topic)
+    return (await db.scalars(stmt)).all()
+
+
+@router.patch("/messages/{message_id}", status_code=204)
+async def mark_message(message_id: int, _: AdminUser, db: DB, read: bool = True):
+    msg = await db.get(ContactMessage, message_id)
+    if msg is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Message not found")
+    msg.is_read = read
+    await db.commit()
 
 
 # ---------- customers ----------

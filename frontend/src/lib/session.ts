@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { api, ApiError } from "./api";
 import type { User } from "./types";
 
-export const TOKEN_COOKIE = "aks_token";
+export const TOKEN_COOKIE = "rawaj_token";
 export const USER_TAG = "current-user";
 
 export async function getToken(): Promise<string | null> {
@@ -27,14 +27,16 @@ export async function getCurrentUser(): Promise<User | null> {
   }
 }
 
+export const TOKEN_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+  maxAge: 60 * 60 * 24 * 7,
+} as const;
+
 export async function setToken(token: string) {
-  (await cookies()).set(TOKEN_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  (await cookies()).set(TOKEN_COOKIE, token, TOKEN_COOKIE_OPTIONS);
 }
 
 export async function clearToken() {

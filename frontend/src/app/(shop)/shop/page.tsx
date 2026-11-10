@@ -3,7 +3,11 @@ import { Suspense } from "react";
 
 import { Listing, ListingSkeleton, parseQuery, type SearchParams } from "@/components/listing/listing";
 
-export const metadata: Metadata = { title: "All products" };
+export const metadata: Metadata = {
+  title: "Shop All Clothing & Home Essentials",
+  description: "Browse every Rawaj.pk product: lawn suits, kurtas, shoes, blankets, towels, pillows and curtains. Cash on Delivery across Pakistan.",
+  alternates: { canonical: "/shop" },
+};
 
 export default function ShopPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   return (

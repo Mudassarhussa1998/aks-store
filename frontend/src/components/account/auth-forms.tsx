@@ -30,12 +30,17 @@ export function LoginForm({ next }: { next: string }) {
           Forgot password?
         </Link>
       </div>
-      {state.error && <Notice tone="error">{state.error}</Notice>}
+      {state.error && (
+        <Notice tone="error">
+          {state.error}
+          {state.error.includes("incorrect") && " If you signed up with Google or Facebook, use that button above, or reset your password."}
+        </Notice>
+      )}
       <button disabled={pending} className={primaryButton}>
         {pending ? "Signing in…" : "Sign in"}
       </button>
       <p className="text-center text-sm text-body">
-        New to Aks?{" "}
+        New to Rawaj?{" "}
         <Link href={`/register?next=${encodeURIComponent(next)}`} className="font-medium text-forest hover:underline">
           Create an account
         </Link>

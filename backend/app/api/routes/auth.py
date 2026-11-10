@@ -8,8 +8,8 @@ from app.api.deps import DB, CurrentUser
 from app.core import cache
 from app.core.config import settings
 from app.core.security import create_access_token, hash_password, verify_password
-from app.models import Review, User
-from app.services import catalog, notify, otp
+from app.models import OAuthAccount, Review, User
+from app.services import catalog, facebook, google, notify, otp
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -74,11 +74,53 @@ async def login(data: schemas.LoginIn, db: DB):
     if await cache.count(key) >= LOGIN_LIMIT:
         raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, "Too many sign-in attempts. Please try again in 15 minutes.")
     user = await _find(db, data.identifier)
-    if user is None or not verify_password(data.password, user.password_hash):
+    if user is None or user.password_hash is None or not verify_password(data.password, user.password_hash):
         await cache.bump(key, LOGIN_WINDOW)
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Email, phone or password is incorrect.")
     await cache.reset(key)
     return _token(user)
+
+
+async def _oauth_sign_in(db: DB, provider: str, subject: str, email: str, name: str | None) -> schemas.OAuthTokenOut:
+    """Sign in (or up) with an account from another provider whose email address it has confirmed."""
+    email = email.lower()
+    is_new = False
+    link = await db.scalar(select(OAuthAccount).where(OAuthAccount.provider == provider, OAuthAccount.subject == subject))
+    if link is not None:
+        user = await db.get(User, link.user_id)
+    else:
+        user = await db.scalar(select(User).where(func.lower(User.email) == email))
+        if user is not None:
+            if user.is_admin:
+                raise HTTPException(status.HTTP_403_FORBIDDEN, "Admin accounts sign in with email and password.")
+            if not user.email_verified:
+                # The provider proves this person owns the inbox. A password set before the email was verified could
+                # belong to someone else who registered with this address, so it is removed and old sessions end.
+                user.password_hash = None
+                user.token_version += 1
+        else:
+            user = User(name=(name or email.split("@")[0])[:120], email=email, password_hash=None)
+            db.add(user)
+            is_new = True
+        await db.flush()
+        db.add(OAuthAccount(user_id=user.id, provider=provider, subject=subject, email=email))
+    if not user.email_verified:
+        user.email_verified_at = datetime.now(UTC)
+    await db.commit()
+    await db.refresh(user)
+    return schemas.OAuthTokenOut(**_token(user).model_dump(), is_new=is_new, needs_phone=user.phone is None)
+
+
+@router.post("/oauth/google", response_model=schemas.OAuthTokenOut)
+async def google_sign_in(data: schemas.GoogleSignInIn, db: DB):
+    claims = await google.verify_id_token(data.id_token, data.nonce)
+    return await _oauth_sign_in(db, "google", claims["sub"], claims["email"], claims.get("name"))
+
+
+@router.post("/oauth/facebook", response_model=schemas.OAuthTokenOut)
+async def facebook_sign_in(data: schemas.FacebookSignInIn, db: DB):
+    profile = await facebook.profile_from_code(data.code)
+    return await _oauth_sign_in(db, "facebook", profile["id"], profile["email"], profile.get("name"))
 
 
 # ---------- profile ----------
@@ -181,7 +223,8 @@ async def reset_password(data: schemas.ResetPasswordIn, db: DB):
 
 @router.post("/password/change", response_model=schemas.TokenOut)
 async def change_password(data: schemas.ChangePasswordIn, user: CurrentUser, db: DB):
-    if not verify_password(data.current_password, user.password_hash):
+    # Accounts made with Google have no password yet; they can set one without a current password.
+    if user.password_hash is not None and not verify_password(data.current_password or "", user.password_hash):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Your current password is incorrect.")
     user.password_hash = hash_password(data.new_password)
     user.token_version += 1  # signs out other devices; this one gets the fresh token below
@@ -200,7 +243,7 @@ async def delete_account(data: schemas.DeleteAccountIn, user: CurrentUser, db: D
     """
     if user.is_admin:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Admin accounts can't be deleted here. Ask another admin to remove your access first.")
-    if not verify_password(data.password, user.password_hash):
+    if user.password_hash is not None and not verify_password(data.password or "", user.password_hash):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Your password is incorrect.")
     reviewed = (await db.scalars(select(Review.product_id).where(Review.user_id == user.id))).all()
     await db.delete(user)

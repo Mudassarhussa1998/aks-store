@@ -34,7 +34,7 @@ class User(TimestampMixin, Base):
     name: Mapped[str] = mapped_column(String(120))
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     phone: Mapped[str | None] = mapped_column(String(20), unique=True)  # stored as +923001234567
-    password_hash: Mapped[str] = mapped_column(String(255))
+    password_hash: Mapped[str | None] = mapped_column(String(255))  # None for Google-only accounts
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     whatsapp_updates: Mapped[bool] = mapped_column(Boolean, default=True)
     email_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -48,12 +48,47 @@ class User(TimestampMixin, Base):
     addresses: Mapped[list["Address"]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
     @property
+    def has_password(self) -> bool:
+        return self.password_hash is not None
+
+    @property
     def email_verified(self) -> bool:
         return self.email_verified_at is not None
 
     @property
     def phone_verified(self) -> bool:
         return self.phone_verified_at is not None
+
+
+class ContactMessage(TimestampMixin, Base):
+    """A message from the Contact us page (also used for career applications)."""
+
+    __tablename__ = "contact_messages"
+    __table_args__ = (Index("ix_contact_messages_read_created", "is_read", "created_at"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))
+    topic: Mapped[str] = mapped_column(String(20))  # order | returns | product | wholesale | careers | other
+    name: Mapped[str] = mapped_column(String(120))
+    email: Mapped[str] = mapped_column(String(255))
+    phone: Mapped[str | None] = mapped_column(String(20))
+    order_number: Mapped[str | None] = mapped_column(String(20))
+    message: Mapped[str] = mapped_column(Text)
+    is_read: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class OAuthAccount(Base):
+    """A sign-in method from another provider (e.g. Google) linked to a user."""
+
+    __tablename__ = "oauth_accounts"
+    __table_args__ = (UniqueConstraint("provider", "subject", name="uq_oauth_provider_subject"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    provider: Mapped[str] = mapped_column(String(20))  # "google"
+    subject: Mapped[str] = mapped_column(String(255))  # the provider's stable user id
+    email: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class OneTimeCode(Base):

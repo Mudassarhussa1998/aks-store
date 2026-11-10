@@ -47,11 +47,22 @@ async function Account({ tab, reset }: { tab: Tab; reset: boolean }) {
   return (
     <>
       <h1 className="mb-8 text-3xl font-semibold md:text-4xl">Assalam-o-Alaikum, {user.name.split(" ")[0]}</h1>
-      {(!user.email_verified || (user.phone && !user.phone_verified)) && (
+      {!user.phone && (
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-mist px-5 py-4">
+          <p className="text-[15px]">
+            <strong className="font-semibold">Add your mobile number.</strong>{" "}
+            <span className="text-muted">Couriers need it to deliver Cash on Delivery orders.</span>
+          </p>
+          <Link href="/complete-profile?next=/account" className="rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-white hover:text-white">
+            Add number
+          </Link>
+        </div>
+      )}
+      {user.phone && (!user.email_verified || !user.phone_verified) && (
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-mist px-5 py-4">
           <p className="text-[15px]">
             <strong className="font-semibold">
-              Verify your {!user.email_verified && user.phone && !user.phone_verified ? "email and mobile number" : !user.email_verified ? "email" : "mobile number"}.
+              Verify your {!user.email_verified && !user.phone_verified ? "email and mobile number" : !user.email_verified ? "email" : "mobile number"}.
             </strong>{" "}
             <span className="text-muted">It keeps your account safe and lets you reset your password.</span>
           </p>

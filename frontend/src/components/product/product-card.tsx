@@ -65,7 +65,7 @@ export function ProductCard({ product: p, priority = false }: { product: Card; p
             <span className="text-[13px] text-muted line-through">{rs(p.compare_at_price)}</span>
           )}
         </span>
-        <span className="flex gap-1" aria-label={`${p.colors.length} colours`}>
+        <span role="img" className="flex gap-1" aria-label={`${p.colors.length} ${p.colors.length === 1 ? "colour" : "colours"}`}>
           {p.colors.map((c) => (
             <span key={c} className="h-3 w-3 rounded-full ring-1 ring-line-strong" style={{ background: c }} />
           ))}

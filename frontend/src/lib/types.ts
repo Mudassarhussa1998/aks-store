@@ -9,6 +9,7 @@ export type User = {
   whatsapp_updates: boolean;
   email_verified: boolean;
   phone_verified: boolean;
+  has_password: boolean;
   gender: "female" | "male" | "other" | null;
   date_of_birth: string | null;
   city: string | null;

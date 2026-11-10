@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     r2_access_key_id: str | None = None
     r2_secret_access_key: str | None = None
     r2_bucket: str | None = None
-    r2_public_base_url: str | None = None  # e.g. https://img.aks.pk
+    r2_public_base_url: str | None = None  # e.g. https://img.rawaj.pk
     media_dir: str = "media"
     media_base_url: str = "http://localhost:8000/media"
 
@@ -39,15 +39,23 @@ class Settings(BaseSettings):
 
     # "console" prints codes to the server log (development). Set real providers in production.
     email_provider: str = "console"  # console | resend
-    email_from: str = "Aks.pk <no-reply@aks.pk>"
+    email_from: str = "Rawaj.pk <no-reply@rawaj.pk>"
     resend_api_key: str | None = None
     sms_provider: str = "console"  # console | twilio
     twilio_account_sid: str | None = None
     twilio_auth_token: str | None = None
     twilio_from: str | None = None  # sender number or alphanumeric sender id
+    # "Continue with Google": the OAuth client id from Google Cloud Console (the web app holds the secret).
+    google_client_id: str | None = None
+    # "Continue with Facebook": app id and secret from developers.facebook.com. The API swaps the login code
+    # for the profile, so the secret lives only here. The redirect is SITE_URL + /auth/facebook/callback.
+    facebook_app_id: str | None = None
+    facebook_app_secret: str | None = None
+
     # Order updates: every status change is emailed; SMS (paid) only for these events.
     sms_order_events: list[str] = ["placed", "shipped"]
-    site_url: str = "http://localhost:3000"  # used for links in emails and SMS
+    site_url: str = "http://localhost:3000"
+    store_email: str | None = None  # contact-form messages are emailed here (they're always saved for the admin inbox)  # used for links in emails and SMS
 
     @property
     def r2_enabled(self) -> bool:

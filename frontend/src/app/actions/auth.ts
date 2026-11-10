@@ -112,9 +112,10 @@ export async function changePassword(currentPassword: string, newPassword: strin
     const { access_token } = await api<TokenOut>("/auth/password/change", {
       method: "POST",
       token,
-      body: { current_password: currentPassword, new_password: newPassword },
+      body: { current_password: currentPassword || null, new_password: newPassword },
     });
     await setToken(access_token); // other devices are signed out; this one keeps going
+    updateTag(USER_TAG); // has_password may have changed
     return { ok: true, data: null };
   } catch (e) {
     return { ok: false, error: message(e, "Could not change your password. Please try again.") };
@@ -125,7 +126,7 @@ export async function deleteAccount(password: string): Promise<ActionResult<null
   const token = await getToken();
   if (!token) return { ok: false, error: "Please sign in first." };
   try {
-    await api<null>("/auth/delete-account", { method: "POST", token, body: { password } });
+    await api<null>("/auth/delete-account", { method: "POST", token, body: { password: password || null } });
   } catch (e) {
     return { ok: false, error: message(e, "Could not delete your account. Please try again.") };
   }

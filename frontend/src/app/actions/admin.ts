@@ -89,3 +89,7 @@ export async function moderateReview(id: number, publish: boolean) {
 export async function deleteReview(id: number) {
   return admin((token) => api<null>(`/admin/reviews/${id}`, { method: "DELETE", token }), { catalog: true });
 }
+
+export async function markMessage(id: number, read: boolean) {
+  return admin((token) => api<null>(`/admin/messages/${id}`, { method: "PATCH", token, query: { read } }));
+}

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { getCategories } from "@/lib/catalog";
 import { getCurrentUser } from "@/lib/session";
 
+import { Logo } from "../brand/logo";
 import { HeartIcon, UserIcon } from "../ui/icons";
 import { CartButton } from "./cart-button";
 import { MobileMenu } from "./mobile-menu";
@@ -19,11 +20,9 @@ export async function Header() {
         Cash on Delivery across Pakistan · Free delivery on orders over Rs 3,000
       </div>
       <header className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-8 gap-y-3 px-4 py-3">
+        <div className="mx-auto flex max-w-7xl items-center gap-x-3 px-4 py-3 sm:gap-x-8">
           <MobileMenu categories={categories.map((c) => ({ slug: c.slug, name: c.name, children: c.children.map(({ slug, name }) => ({ slug, name })) }))} />
-          <Link href="/" className="text-[28px] font-semibold tracking-[0.08em]">
-            AKS<span className="text-sm tracking-normal text-muted">.pk</span>
-          </Link>
+          <Logo />
           <nav aria-label="Main" className="hidden flex-1 flex-wrap gap-x-6 gap-y-1 text-sm font-medium lg:flex">
             {nav.map((n) => (
               <Link key={n.href} href={n.href} className="py-2 hover:text-forest">

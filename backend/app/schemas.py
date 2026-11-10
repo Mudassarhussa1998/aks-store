@@ -50,6 +50,7 @@ class UserOut(ORM):
     whatsapp_updates: bool
     email_verified: bool
     phone_verified: bool
+    has_password: bool
     gender: str | None
     date_of_birth: date | None
     city: str | None
@@ -109,12 +110,56 @@ class ResetPasswordIn(BaseModel):
 
 
 class ChangePasswordIn(BaseModel):
-    current_password: str
+    current_password: str | None = None  # not needed when the account has no password yet (Google sign-up)
     new_password: Password
 
 
+class GoogleSignInIn(BaseModel):
+    id_token: str = Field(max_length=4096)
+    nonce: str = Field(min_length=16, max_length=128)
+
+
+class FacebookSignInIn(BaseModel):
+    code: str = Field(min_length=10, max_length=2048)
+
+
+class OAuthTokenOut(TokenOut):
+    is_new: bool
+    needs_phone: bool
+
+
 class DeleteAccountIn(BaseModel):
-    password: str
+    password: str | None = None  # required when the account has a password
+
+
+ContactTopic = Literal["order", "returns", "product", "wholesale", "careers", "other"]
+
+
+class ContactIn(BaseModel):
+    topic: ContactTopic = "other"
+    name: str = Field(min_length=2, max_length=120)
+    email: EmailStr
+    phone: PkPhone | None = None
+    order_number: str | None = Field(default=None, max_length=20)
+    message: str = Field(min_length=10, max_length=4000)
+    website: str = ""  # honeypot: hidden from people, bots fill it in
+
+    @field_validator("phone", "order_number", mode="before")
+    @classmethod
+    def blank_is_none(cls, v: str | None) -> str | None:
+        return (v or "").strip() or None
+
+
+class ContactMessageOut(ORM):
+    id: int
+    topic: str
+    name: str
+    email: str
+    phone: str | None
+    order_number: str | None
+    message: str
+    is_read: bool
+    created_at: datetime
 
 
 class MessageOut(BaseModel):
@@ -517,3 +562,4 @@ class Stats(BaseModel):
     low_stock_variants: int
     customers: int
     pending_reviews: int
+    unread_messages: int = 0

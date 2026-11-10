@@ -7,8 +7,10 @@ import { createPortal } from "react-dom";
 
 import { logout } from "@/app/actions/auth";
 
+import { SealMark } from "../brand/logo";
 import {
   BagIcon,
+  ChatIcon,
   CloseIcon,
   GridIcon,
   LayersIcon,
@@ -44,6 +46,7 @@ const GROUPS: { title: string; items: Item[] }[] = [
     title: "People",
     items: [
       { href: "/admin/customers", label: "Customers", Icon: UsersIcon },
+      { href: "/admin/messages", label: "Messages", Icon: ChatIcon },
       { href: "/admin/reviews", label: "Reviews", Icon: StarIcon },
     ],
   },
@@ -53,8 +56,9 @@ const GROUPS: { title: string; items: Item[] }[] = [
 function Logo() {
   return (
     <Link href="/admin" className="flex items-center gap-2 px-3">
-      <span className="text-xl font-semibold tracking-[0.08em]">
-        AKS<span className="text-xs tracking-normal text-muted">.pk</span>
+      <SealMark size={28} />
+      <span className="text-lg font-semibold tracking-[0.06em]">
+        RAWAJ<span className="text-[11px] tracking-normal text-muted">.pk</span>
       </span>
       <span className="rounded-full bg-forest px-2 py-0.5 text-[11px] font-medium text-white">Admin</span>
     </Link>

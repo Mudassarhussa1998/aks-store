@@ -79,7 +79,7 @@ async def quote(db: AsyncSession, data: schemas.QuoteIn, *, lock: bool = False) 
 
 
 def _order_number() -> str:
-    return "AKS-" + "".join(secrets.choice("23456789ABCDEFGHJKLMNPQRSTUVWXYZ") for _ in range(6))
+    return "RWJ-" + "".join(secrets.choice("23456789ABCDEFGHJKLMNPQRSTUVWXYZ") for _ in range(6))
 
 
 async def place_order(db: AsyncSession, data: schemas.CheckoutIn, user: User | None) -> Order:

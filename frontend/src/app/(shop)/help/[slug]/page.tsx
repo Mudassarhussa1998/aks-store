@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { summary } from "@/lib/seo";
+
 // Placeholder copy: replace the [bracketed] details with your real business information before launch.
 const PAGES: Record<string, { title: string; body: string[] }> = {
   delivery: {
@@ -20,21 +22,6 @@ const PAGES: Record<string, { title: string; body: string[] }> = {
       "To start a return, contact us with your order number and we'll arrange the pickup. [Add your refund method and timeline here.]",
     ],
   },
-  contact: {
-    title: "Contact us",
-    body: [
-      "WhatsApp: [your WhatsApp number] — Monday to Saturday, 10am to 7pm.",
-      "Email: [your support email]",
-      "Please include your order number so we can help quickly.",
-    ],
-  },
-  about: {
-    title: "About Aks",
-    body: [
-      "Aks brings clothing for the family and soft essentials for the home together in one place, with Cash on Delivery across Pakistan.",
-      "[Tell your brand story here: who you are, where you source from and what you care about.]",
-    ],
-  },
   privacy: {
     title: "Privacy policy",
     body: [
@@ -42,9 +29,14 @@ const PAGES: Record<string, { title: string; body: string[] }> = {
       "We never sell your personal information. [Have this policy reviewed before launch.]",
     ],
   },
-  terms: {
-    title: "Terms of service",
-    body: ["[Add your terms of sale: pricing, order acceptance, delivery, returns and liability. Have them reviewed before launch.]"],
+  "delete-your-data": {
+    title: "Deleting your data",
+    body: [
+      "You can delete your Rawaj.pk account and personal data at any time, including if you signed up with Google or Facebook.",
+      "Sign in, open My Account → Profile, and choose Delete account at the bottom of the page. Your profile, saved addresses, wishlist, browsing history, reviews and Google/Facebook sign-in links are removed straight away.",
+      "Orders you placed are kept for delivery and accounting records, but are no longer linked to an account.",
+      "If you can no longer sign in, contact us from the email or mobile number on your account and we'll delete it for you within 7 days. [Add your support contact.]",
+    ],
   },
 };
 
@@ -53,8 +45,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const page = PAGES[(await params).slug];
-  return page ? { title: page.title } : {};
+  const slug = (await params).slug;
+  const page = PAGES[slug];
+  return page ? { title: page.title, description: summary(page.body[0]), alternates: { canonical: `/help/${slug}` } } : {};
 }
 
 export default async function HelpPage({ params }: { params: Promise<{ slug: string }> }) {

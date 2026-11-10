@@ -8,10 +8,17 @@ export const HERO = {
   text: "Clothing for the family and soft essentials for the house. Pay in cash when it arrives.",
   cta: { label: "Shop now", href: "/shop" },
   link: { label: "New arrivals", href: "/shop?sort=newest" },
+  points: ["Cash on Delivery", "Free delivery over Rs 3,000", "7-day easy returns"],
+  /** Background clips in public/hero (free-licence Pexels footage; swap for your own brand film any time). */
+  video: {
+    wide: { video: "/hero/fabric-wide.mp4", poster: "/hero/fabric-wide.jpg" },
+    tall: { video: "/hero/fabric-tall.mp4", poster: "/hero/fabric-tall.jpg" },
+  },
+  /** The first card is the large feature; the other two stack beside it. */
   cards: [
-    { title: "Bedding", text: "Blankets, sheets and pillows", href: "/c/home-living", product: "hotel-pillow-pair" },
-    { title: "Women", text: "New season lawn", href: "/c/women", product: "embroidered-lawn-3-piece" },
-    { title: "Bath", text: "Towels that stay soft", href: "/c/towels-bath", product: "spa-bath-essentials" },
+    { label: "Women", title: "New season lawn", text: "Embroidered 3-piece suits, ready to wear.", cta: "Shop women", href: "/c/women", product: "embroidered-lawn-3-piece" },
+    { label: "Bedding", title: "Sleep softer", text: "Blankets, sheets and pillows.", cta: "Shop bedding", href: "/c/home-living", product: "hotel-pillow-pair" },
+    { label: "Bath", title: "Towels that stay soft", text: "Thick cotton, wash after wash.", cta: "Shop bath", href: "/c/towels-bath", product: "spa-bath-essentials" },
   ],
 } as const;
 

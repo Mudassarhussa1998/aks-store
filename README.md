@@ -1,4 +1,4 @@
-# Aks.pk
+# Rawaj.pk
 
 Clothing and home essentials store for Pakistan, with Cash on Delivery.
 
@@ -63,7 +63,17 @@ Tests: `cd backend && uv run pytest`.
 4. **Email and SMS codes** (sign-up verification and password reset):
    - Email: create a free [Resend](https://resend.com) account, verify your domain, then set `EMAIL_PROVIDER=resend`, `RESEND_API_KEY` and `EMAIL_FROM` in `deploy/.env`.
    - SMS: set `SMS_PROVIDER=twilio` with your Twilio SID, token and sender. Until then, phone codes only appear in the API log, so leave phone verification optional.
-5. **First run:**
+5. **Continue with Google** (optional):
+   - In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), set up the OAuth consent screen (app name Rawaj.pk, your logo, support email), then create an **OAuth client ID** of type **Web application**.
+   - Authorised redirect URI: `https://<your-domain>/auth/google/callback` (add `http://localhost:3000/auth/google/callback` for local testing).
+   - Put the client id in both `deploy/.env` (`GOOGLE_CLIENT_ID`) and Vercel (`GOOGLE_CLIENT_ID`), and the secret only in Vercel (`GOOGLE_CLIENT_SECRET`).
+   - New Google users are asked for their mobile number right after signing in.
+6. **Continue with Facebook** (optional):
+   - At [developers.facebook.com](https://developers.facebook.com/apps), create an app (type **Consumer**) and add **Facebook Login for Business** or **Facebook Login**.
+   - Valid OAuth redirect URI: `https://<your-domain>/auth/facebook/callback`. In **App settings → Basic**, add your privacy policy URL (`/help/privacy`) and data deletion instructions URL (`/help/delete-your-data`), then switch the app to **Live**.
+   - Put `FACEBOOK_APP_ID` in Vercel and in `deploy/.env`, and `FACEBOOK_APP_SECRET` only in `deploy/.env`. Set `SITE_URL` in `deploy/.env` to your storefront address.
+   - Facebook accounts that don't share an email are asked to sign up with email or Google instead.
+7. **First run:**
    - Create your admin account: `docker compose exec api uv run --no-dev python create_admin.py`. It uses `SEED_ADMIN_*` from `deploy/.env`.
    - Sign in at `/admin` to add categories and products.
    - `seed.py` loads the sample catalog. Use it only on a test server.

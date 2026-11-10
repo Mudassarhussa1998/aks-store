@@ -13,7 +13,7 @@ export type CartItem = {
   image: string | null;
 };
 
-const KEY = "aks_cart_v1";
+const KEY = "rawaj_cart_v1";
 const EMPTY: CartItem[] = [];
 const listeners = new Set<() => void>();
 let snapshot: CartItem[] | null = null;

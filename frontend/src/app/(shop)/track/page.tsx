@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 
 import { TrackForm } from "@/components/order/track-form";
 
-export const metadata: Metadata = { title: "Track your order" };
+export const metadata: Metadata = {
+  title: "Track your order",
+  description: "Check the status of your Rawaj.pk order with your order number and mobile number.",
+  alternates: { canonical: "/track" },
+};
 
 export default function TrackPage() {
   return (
