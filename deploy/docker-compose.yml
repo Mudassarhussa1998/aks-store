@@ -1,0 +1,49 @@
+# Production stack for one AWS EC2 instance: API + Postgres + Redis behind Caddy (automatic HTTPS).
+# The storefront runs on Vercel; product images live on Cloudflare R2.
+#
+#   cd deploy && cp .env.example .env   # fill in secrets
+#   docker compose up -d --build
+#   docker compose exec api uv run --no-dev python seed.py   # first time only, optional sample data
+
+services:
+  api:
+    build: ../backend
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://aks:${POSTGRES_PASSWORD}@db/aks
+      REDIS_URL: redis://redis:6379/0
+      ENV: production
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_started }
+    restart: unless-stopped
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: aks
+      POSTGRES_DB: aks
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aks"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    ports: ["80:80", "443:443"]
+    command: caddy reverse-proxy --from ${API_DOMAIN} --to api:8000
+    volumes: [caddy_data:/data]
+    depends_on: [api]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  caddy_data:
