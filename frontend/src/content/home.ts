@@ -9,10 +9,13 @@ export const HERO = {
   cta: { label: "Shop now", href: "/shop" },
   link: { label: "New arrivals", href: "/shop?sort=newest" },
   points: ["Cash on Delivery", "Free delivery over Rs 3,000", "7-day easy returns"],
-  /** Background clips in public/hero (free-licence Pexels footage; swap for your own brand film any time). */
+  /**
+   * Background clips in public/hero: free-licence Pexels footage ("Various Clothing and Apparel at a Store", 8306450,
+   * mirrored; "Clothes Hanging in a Rack", 7764682). Swap for your own brand film any time.
+   */
   video: {
-    wide: { video: "/hero/fabric-wide.mp4", poster: "/hero/fabric-wide.jpg" },
-    tall: { video: "/hero/fabric-tall.mp4", poster: "/hero/fabric-tall.jpg" },
+    wide: { video: "/hero/boutique-wide.mp4", poster: "/hero/boutique-wide.jpg" },
+    tall: { video: "/hero/rack-tall.mp4", poster: "/hero/rack-tall.jpg" },
   },
   /** The first card is the large feature; the other two stack beside it. */
   cards: [

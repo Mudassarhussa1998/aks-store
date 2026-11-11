@@ -4,6 +4,7 @@ import Link from "next/link";
 import { rs } from "@/lib/format";
 import type { ProductCard as Card } from "@/lib/types";
 
+import { BagIcon } from "../ui/icons";
 import { WishlistButton } from "../wishlist/wishlist-button";
 
 const BADGE: Record<string, string> = {
@@ -32,7 +33,7 @@ export function ProductCard({ product: p, priority = false }: { product: Card; p
         )}
         {p.badge && (
           <span
-            className={`absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wider uppercase ${BADGE[p.badge] ?? "bg-white text-ink"}`}
+            className={`absolute top-2.5 left-2.5 rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase sm:top-3 sm:left-3 sm:px-2.5 sm:py-1 sm:text-[11px] ${BADGE[p.badge] ?? "bg-white text-ink"}`}
           >
             {p.badge}
           </span>
@@ -42,11 +43,27 @@ export function ProductCard({ product: p, priority = false }: { product: Card; p
             Out of stock
           </span>
         )}
-        <span className="absolute inset-x-3 bottom-3 flex min-h-11 translate-y-[130%] items-center justify-center rounded-full bg-white/95 text-[13px] font-semibold transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 [@media(hover:none)]:translate-y-0">
-          Quick view · Choose options
-        </span>
+        {p.in_stock && (
+          <>
+            {/* Mouse: a "Choose options" pill slides up on hover. Touch screens: a small bag button instead. */}
+            <span
+              aria-hidden
+              className="absolute inset-x-3 bottom-3 hidden h-10 translate-y-[150%] items-center justify-center gap-2 rounded-full bg-white/95 text-[13px] font-medium whitespace-nowrap shadow-sm backdrop-blur transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0 [@media(hover:hover)]:flex"
+            >
+              <BagIcon size={16} />
+              Choose options
+            </span>
+            <span
+              aria-hidden
+              className="absolute right-2 bottom-2 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-ink shadow-sm backdrop-blur [@media(hover:hover)]:hidden"
+            >
+              <BagIcon size={17} />
+              <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-forest text-[11px] leading-none font-semibold text-white">+</span>
+            </span>
+          </>
+        )}
       </Link>
-      <WishlistButton productId={p.id} className="absolute top-2 right-2" />
+      <WishlistButton productId={p.id} small className="absolute top-2 right-2" />
       <div className="flex items-center justify-between gap-2 text-xs">
         <span className="tracking-wider text-muted uppercase">{p.category}</span>
         {p.rating_count > 0 && (
@@ -55,7 +72,7 @@ export function ProductCard({ product: p, priority = false }: { product: Card; p
           </span>
         )}
       </div>
-      <Link href={`/p/${p.slug}`} className="-mt-1 text-base font-medium hover:text-forest">
+      <Link href={`/p/${p.slug}`} className="-mt-1 text-[15px] leading-snug font-medium hover:text-forest sm:text-base">
         {p.name}
       </Link>
       <div className="flex items-center justify-between gap-2">
