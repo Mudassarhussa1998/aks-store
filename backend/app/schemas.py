@@ -2,8 +2,9 @@ import re
 from datetime import date, datetime
 from typing import Annotated, Literal
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, computed_field, field_validator
 
+from app.core.config import settings
 from app.models import OrderStatus
 
 PK_PHONE = r"^(\+92|0)3\d{2}[\s-]?\d{7}$"
@@ -55,6 +56,11 @@ class UserOut(ORM):
     date_of_birth: date | None
     city: str | None
     created_at: datetime
+
+    @computed_field
+    @property
+    def can_verify_phone(self) -> bool:
+        return settings.sms_enabled
 
 
 class TokenOut(BaseModel):

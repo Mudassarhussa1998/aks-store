@@ -9,6 +9,8 @@ export type User = {
   whatsapp_updates: boolean;
   email_verified: boolean;
   phone_verified: boolean;
+  /** False when the store runs without SMS: only the email is verified. */
+  can_verify_phone: boolean;
   has_password: boolean;
   gender: "female" | "male" | "other" | null;
   date_of_birth: string | null;

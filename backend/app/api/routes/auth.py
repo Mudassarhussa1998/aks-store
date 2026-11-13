@@ -160,6 +160,8 @@ async def update_me(data: schemas.ProfileIn, user: CurrentUser, db: DB, tasks: B
 async def send_verification(data: schemas.VerifySendIn, user: CurrentUser, db: DB, tasks: BackgroundTasks):
     if (user.email_verified if data.channel == "email" else user.phone_verified):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, f"Your {'email' if data.channel == 'email' else 'mobile number'} is already verified.")
+    if data.channel == "phone" and not settings.sms_enabled:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Mobile number verification isn't available yet.")
     purpose = otp.VERIFY_EMAIL if data.channel == "email" else otp.VERIFY_PHONE
     return await _send_code(db, tasks, user, purpose, data.channel)
 
@@ -191,7 +193,7 @@ async def forgot_password(data: schemas.ForgotPasswordIn, db: DB, tasks: Backgro
     user = await _find(db, data.identifier)
     if user is None:
         return schemas.MessageOut(detail=FORGOT_SENT)
-    by_phone = "@" not in data.identifier
+    by_phone = "@" not in data.identifier and settings.sms_enabled  # without SMS, the code goes to the account's email
     if by_phone and not user.phone_verified:
         return schemas.MessageOut(detail=FORGOT_SENT)  # codes only go to numbers the owner has proven
     try:

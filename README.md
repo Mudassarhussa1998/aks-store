@@ -62,7 +62,7 @@ Tests: `cd backend && uv run pytest`.
    - Add your domain.
 4. **Email and SMS codes** (sign-up verification and password reset):
    - Email: create a free [Resend](https://resend.com) account, verify your domain, then set `EMAIL_PROVIDER=resend`, `RESEND_API_KEY` and `EMAIL_FROM` in `deploy/.env`.
-   - SMS: set `SMS_PROVIDER=twilio` with your Twilio SID, token and sender. Until then, phone codes only appear in the API log, so leave phone verification optional.
+   - SMS (optional): `SMS_PROVIDER=off` launches free, with email-only verification. For SMS, use a Pakistani bulk-SMS gateway with `SMS_PROVIDER=http` and its send link in `SMS_HTTP_URL` (`{to}` and `{text}` placeholders), or `SMS_PROVIDER=twilio`.
 5. **Continue with Google** (optional):
    - In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), set up the OAuth consent screen (app name Rawaj.pk, your logo, support email), then create an **OAuth client ID** of type **Web application**.
    - Authorised redirect URI: `https://<your-domain>/auth/google/callback` (add `http://localhost:3000/auth/google/callback` for local testing).

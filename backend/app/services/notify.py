@@ -33,9 +33,26 @@ async def send_email(to: str, subject: str, text: str, html: str | None = None) 
         log.error("email to %s failed: %s", to, exc)
 
 
+async def _send_http_sms(to: str, text: str) -> None:
+    """Any bulk-SMS gateway with a link like https://gateway.pk/send?key=XXX&to={to}&msg={text}."""
+    url = httpx.URL(settings.sms_http_url or "")
+    params = {k: v.replace("{to}", to.lstrip("+")).replace("{text}", text) for k, v in url.params.multi_items()}
+    async with httpx.AsyncClient(timeout=10) as client:
+        if settings.sms_http_method.upper() == "POST":
+            r = await client.post(url.copy_with(query=None), data=params)
+        else:
+            r = await client.get(url.copy_with(query=None), params=params)
+    if r.is_error:  # the link holds the gateway's key, so never log it
+        raise RuntimeError(f"gateway replied {r.status_code}: {r.text[:200]}")
+
+
 async def send_sms(to: str, text: str) -> None:
+    if settings.sms_provider == "off":
+        return
     try:
-        if settings.sms_provider == "twilio" and settings.twilio_account_sid and settings.twilio_auth_token:
+        if settings.sms_provider == "http" and settings.sms_http_url:
+            await _send_http_sms(to, text)
+        elif settings.sms_provider == "twilio" and settings.twilio_account_sid and settings.twilio_auth_token:
             async with httpx.AsyncClient(timeout=10) as client:
                 r = await client.post(
                     f"https://api.twilio.com/2010-04-01/Accounts/{settings.twilio_account_sid}/Messages.json",
@@ -47,7 +64,7 @@ async def send_sms(to: str, text: str) -> None:
             outbox.append({"channel": "sms", "to": to, "text": text})
             log.warning("SMS to %s | %s", to, text)
     except Exception as exc:  # noqa: BLE001
-        log.error("sms to %s failed: %s", to, exc)
+        log.error("sms to %s failed: %s", to, type(exc).__name__ if isinstance(exc, httpx.HTTPError) else exc)
 
 
 def code_email(code: str, purpose: str) -> tuple[str, str, str]:

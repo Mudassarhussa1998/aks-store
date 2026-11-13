@@ -82,7 +82,7 @@ async def send(o: dict) -> None:
 </div>"""
         text = "\n".join([*lines, "", *o["items"], "", f"Track your order: {settings.site_url}/track"])
         await notify.send_email(o["email"], f"{subject} · Rawaj.pk", text, html)
-    if o["event"] in settings.sms_order_events:
+    if settings.sms_enabled and o["event"] in settings.sms_order_events:
         try:
             phone = normalize_pk_phone(o["phone"])
         except ValueError:

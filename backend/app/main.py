@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 if settings.env == "production" and "console" in (settings.email_provider, settings.sms_provider):
-    logging.getLogger("rawaj").warning("EMAIL_PROVIDER/SMS_PROVIDER is 'console': verification codes are only written to the log.")
+    logging.getLogger("rawaj").warning("EMAIL_PROVIDER/SMS_PROVIDER is 'console': verification codes are only written to the log (use SMS_PROVIDER=off to skip SMS).")
 
 api = APIRouter(prefix="/api/v1")
 for module in (auth, catalog, orders, account, contact, admin):

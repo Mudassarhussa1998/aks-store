@@ -30,7 +30,7 @@ async function Verify({ next, sent, only }: Params) {
 
   const steps: VerifyStep[] = [];
   if (!user.email_verified && only !== "phone") steps.push({ channel: "email", target: user.email });
-  if (!user.phone_verified && user.phone && only !== "email") steps.push({ channel: "phone", target: phone(user.phone) });
+  if (user.can_verify_phone && !user.phone_verified && user.phone && only !== "email") steps.push({ channel: "phone", target: phone(user.phone) });
 
   return <VerifyFlow steps={steps} sentFirst={sent === "email" && steps[0]?.channel === "email"} next={target} />;
 }

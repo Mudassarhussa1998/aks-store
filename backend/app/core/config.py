@@ -41,7 +41,12 @@ class Settings(BaseSettings):
     email_provider: str = "console"  # console | resend
     email_from: str = "Rawaj.pk <no-reply@rawaj.pk>"
     resend_api_key: str | None = None
-    sms_provider: str = "console"  # console | twilio
+    # SMS is optional. "off" (free): no phone codes; customers verify by email and the store confirms COD
+    # orders by phone anyway. "http": any Pakistani bulk-SMS gateway with a GET/POST link (Veevo Tech,
+    # SendPK, Branded SMS Pakistan...). In SMS_HTTP_URL, {to} is 923XXXXXXXXX and {text} the message.
+    sms_provider: str = "console"  # console | off | http | twilio
+    sms_http_url: str | None = None
+    sms_http_method: str = "GET"  # GET puts {to}/{text} in the link; POST sends the link's query as form data
     twilio_account_sid: str | None = None
     twilio_auth_token: str | None = None
     twilio_from: str | None = None  # sender number or alphanumeric sender id
@@ -56,6 +61,10 @@ class Settings(BaseSettings):
     sms_order_events: list[str] = ["placed", "shipped"]
     site_url: str = "http://localhost:3000"
     store_email: str | None = None  # contact-form messages are emailed here (they're always saved for the admin inbox)  # used for links in emails and SMS
+
+    @property
+    def sms_enabled(self) -> bool:
+        return self.sms_provider != "off"
 
     @property
     def r2_enabled(self) -> bool:

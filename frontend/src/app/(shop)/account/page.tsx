@@ -43,6 +43,7 @@ async function Account({ tab, reset }: { tab: Tab; reset: boolean }) {
   const user = await getCurrentUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(`/account?tab=${tab}`)}`);
   const token = (await getToken())!;
+  const phoneUnverified = user.can_verify_phone && !user.phone_verified;
 
   return (
     <>
@@ -58,11 +59,11 @@ async function Account({ tab, reset }: { tab: Tab; reset: boolean }) {
           </Link>
         </div>
       )}
-      {user.phone && (!user.email_verified || !user.phone_verified) && (
+      {user.phone && (!user.email_verified || phoneUnverified) && (
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-mist px-5 py-4">
           <p className="text-[15px]">
             <strong className="font-semibold">
-              Verify your {!user.email_verified && !user.phone_verified ? "email and mobile number" : !user.email_verified ? "email" : "mobile number"}.
+              Verify your {!user.email_verified && phoneUnverified ? "email and mobile number" : !user.email_verified ? "email" : "mobile number"}.
             </strong>{" "}
             <span className="text-muted">It keeps your account safe and lets you reset your password.</span>
           </p>

@@ -40,7 +40,7 @@ export function ResetFlow() {
           request();
         }}
       >
-        <Field label="Email or mobile number" hint="Codes go by SMS only to a mobile number you've verified. Otherwise, use your email.">
+        <Field label="Email or mobile number" hint="We'll send a 6-digit code to your email, or by SMS to a mobile number you've verified.">
           <input
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}

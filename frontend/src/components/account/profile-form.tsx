@@ -126,7 +126,7 @@ function ContactDetails({ user }: { user: User }) {
         <Field label="Email" aside={<Status verified={user.email_verified} href={verifyHref("email")} />}>
           <input name="email" type="email" required autoComplete="email" defaultValue={user.email} className={inputClass} />
         </Field>
-        <Field label="Mobile number" aside={user.phone && <Status verified={user.phone_verified} href={verifyHref("phone")} />}>
+        <Field label="Mobile number" aside={user.phone && user.can_verify_phone && <Status verified={user.phone_verified} href={verifyHref("phone")} />}>
           <input
             name="phone"
             type="tel"
