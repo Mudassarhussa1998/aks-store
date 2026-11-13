@@ -10,7 +10,7 @@ services:
     build: ../backend
     env_file: .env
     environment:
-      DATABASE_URL: postgresql+asyncpg://rawaj:${POSTGRES_PASSWORD}@db/rawaj
+      DATABASE_URL: postgresql+asyncpg://velenzay:${POSTGRES_PASSWORD}@db/velenzay
       REDIS_URL: redis://redis:6379/0
       ENV: production
     depends_on:
@@ -21,12 +21,12 @@ services:
   db:
     image: postgres:17
     environment:
-      POSTGRES_USER: rawaj
-      POSTGRES_DB: rawaj
+      POSTGRES_USER: velenzay
+      POSTGRES_DB: velenzay
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U rawaj"]
+      test: ["CMD-SHELL", "pg_isready -U velenzay"]
       interval: 5s
       retries: 10
     restart: unless-stopped

@@ -40,7 +40,7 @@ export function LoginForm({ next }: { next: string }) {
         {pending ? "Signing in…" : "Sign in"}
       </button>
       <p className="text-center text-sm text-body">
-        New to Rawaj?{" "}
+        New to Velenzay?{" "}
         <Link href={`/register?next=${encodeURIComponent(next)}`} className="font-medium text-forest hover:underline">
           Create an account
         </Link>

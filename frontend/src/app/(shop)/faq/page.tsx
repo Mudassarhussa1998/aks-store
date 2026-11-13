@@ -7,7 +7,7 @@ import { FAQ } from "@/content/company";
 
 export const metadata: Metadata = {
   title: "Frequently asked questions",
-  description: "Answers about Cash on Delivery, delivery times and charges, returns, product qualities and your Rawaj.pk account.",
+  description: "Answers about Cash on Delivery, delivery times and charges, returns, product qualities and your Velenzay account.",
   alternates: { canonical: "/faq" },
 };
 

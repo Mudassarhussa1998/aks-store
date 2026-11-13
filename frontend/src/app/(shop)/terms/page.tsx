@@ -7,7 +7,7 @@ import { breadcrumbJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions",
-  description: "The terms for shopping at Rawaj.pk: orders, Cash on Delivery, prices, delivery, cancellations, returns and refunds, and your account.",
+  description: "The terms for shopping at Velenzay: orders, Cash on Delivery, prices, delivery, cancellations, returns and refunds, and your account.",
   alternates: { canonical: "/terms" },
 };
 

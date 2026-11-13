@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { api, ApiError } from "./api";
 import type { User } from "./types";
 
-export const TOKEN_COOKIE = "rawaj_token";
+export const TOKEN_COOKIE = "velenzay_token";
 export const USER_TAG = "current-user";
 
 export async function getToken(): Promise<string | null> {

@@ -23,7 +23,7 @@ const SIGN_IN_ERRORS: Record<string, string> = {
 
 export default function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
   return (
-    <AuthShell title="Sign in to Rawaj" subtitle="Track orders, save addresses and keep a wishlist.">
+    <AuthShell title="Sign in to Velenzay" subtitle="Track orders, save addresses and keep a wishlist.">
       <Suspense fallback={<AuthSkeleton rows={2} />}>
         {searchParams.then(({ next, error }) => (
           <>

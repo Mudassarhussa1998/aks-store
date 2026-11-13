@@ -75,8 +75,8 @@ export function ContactForm({ defaults }: { defaults: Defaults }) {
         <input name="phone" type="tel" autoComplete="tel" placeholder="0300 1234567" defaultValue={defaults.phone} className={inputClass} />
       </Field>
       {topic === "order" || topic === "returns" ? (
-        <Field label="Order number" hint="Optional. Starts with RWJ-.">
-          <input name="order_number" placeholder="RWJ-XXXXXX" className={`${inputClass} uppercase`} />
+        <Field label="Order number" hint="Optional. Starts with VLZ-.">
+          <input name="order_number" placeholder="VLZ-XXXXXX" className={`${inputClass} uppercase`} />
         </Field>
       ) : (
         <span className="hidden sm:block" />

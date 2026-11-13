@@ -8,7 +8,7 @@ export function AccountNotice() {
   if (params.get("account") !== "deleted") return null;
   return (
     <p role="status" className="bg-forest px-4 py-3 text-center text-sm text-white">
-      Your account has been deleted. Thank you for shopping with Rawaj.pk.
+      Your account has been deleted. Thank you for shopping with Velenzay.
     </p>
   );
 }

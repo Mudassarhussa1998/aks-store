@@ -1,8 +1,9 @@
 import Link from "next/link";
 
+import { Mark } from "../brand/logo";
+
 import { SOCIAL } from "@/content/company";
 
-import { Seal } from "../brand/logo";
 const COLUMNS = [
   {
     title: "Shop",
@@ -44,9 +45,9 @@ export function Footer() {
     <footer className="bg-sand">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 pt-12 pb-6 text-sm md:grid-cols-4">
         <div className="col-span-2 flex flex-col gap-2.5 md:col-span-1">
-          <Seal size={104} />
-          <span className="text-xl font-semibold tracking-[0.08em]">
-            RAWAJ<span className="text-[13px] tracking-normal text-muted">.pk</span>
+          <span className="flex items-center gap-2.5">
+            <Mark size={40} />
+            <span className="text-xl font-semibold tracking-[0.14em]">VELENZAY</span>
           </span>
           <p className="leading-relaxed text-body">Clothing and home essentials, delivered across Pakistan.</p>
           {SOCIAL.some((x) => x.url) && (
@@ -71,7 +72,7 @@ export function Footer() {
         ))}
       </div>
       <div className="mx-auto max-w-7xl border-t border-[#DDD6CA] px-4 py-4 text-[13px] text-muted">
-        © 2026 Rawaj.pk · All rights reserved
+        © 2026 Velenzay · All rights reserved
       </div>
     </footer>
   );

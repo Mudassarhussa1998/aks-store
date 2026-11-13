@@ -25,13 +25,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const copy = CATEGORY_COPY[node.slug];
   const description = summary(
     copy?.paragraphs[0] ??
-      `Shop ${node.name.toLowerCase()} online at Rawaj.pk${node.description ? ` — ${node.description.toLowerCase()}` : ""}. Fair prices, Cash on Delivery and 7-day returns across Pakistan.`,
+      `Shop ${node.name.toLowerCase()} online at Velenzay${node.description ? ` — ${node.description.toLowerCase()}` : ""}. Fair prices, Cash on Delivery and 7-day returns across Pakistan.`,
   );
   return {
     title: `${node.name} — Shop Online in Pakistan`,
     description,
     alternates: { canonical: `/c/${node.slug}` }, // filtered and sorted views point back to the plain category
-    openGraph: { title: `${node.name} · Rawaj.pk`, description, url: `/c/${node.slug}`, images: node.image_url ? [{ url: `${node.image_url}-1080.webp`, alt: node.name }] : undefined },
+    openGraph: { title: `${node.name} · Velenzay`, description, url: `/c/${node.slug}`, images: node.image_url ? [{ url: `${node.image_url}-1080.webp`, alt: node.name }] : undefined },
   };
 }
 

@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     r2_access_key_id: str | None = None
     r2_secret_access_key: str | None = None
     r2_bucket: str | None = None
-    r2_public_base_url: str | None = None  # e.g. https://img.rawaj.pk
+    r2_public_base_url: str | None = None  # e.g. https://img.velenzay.com
     media_dir: str = "media"
     media_base_url: str = "http://localhost:8000/media"
 
@@ -39,7 +39,7 @@ class Settings(BaseSettings):
 
     # "console" prints codes to the server log (development). Set real providers in production.
     email_provider: str = "console"  # console | resend
-    email_from: str = "Rawaj.pk <no-reply@rawaj.pk>"
+    email_from: str = "Velenzay <no-reply@velenzay.com>"
     resend_api_key: str | None = None
     # SMS is optional. "off" (free): no phone codes; customers verify by email and the store confirms COD
     # orders by phone anyway. "http": any Pakistani bulk-SMS gateway with a GET/POST link (Veevo Tech,

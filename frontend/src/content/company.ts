@@ -6,7 +6,7 @@
 export const CONTACT = {
   whatsapp: "[+92 3XX XXXXXXX]",
   whatsappLink: "", // e.g. "https://wa.me/923001234567" — the WhatsApp button appears once this is set
-  email: "[hello@rawaj.pk]",
+  email: "[hello@velenzay.com]",
   phone: "[+92 42 XXXX XXXX]",
   hours: "Monday to Saturday, 10am – 7pm",
   address: "[Your warehouse or office address], Lahore, Pakistan",
@@ -14,19 +14,19 @@ export const CONTACT = {
 
 /** Your social profiles. Filled-in ones show in the footer and tell Google they belong to this store. */
 export const SOCIAL: { name: string; url: string }[] = [
-  { name: "Instagram", url: "" }, // e.g. "https://www.instagram.com/rawaj.pk"
+  { name: "Instagram", url: "" }, // e.g. "https://www.instagram.com/velenzay"
   { name: "Facebook", url: "" },
   { name: "TikTok", url: "" },
   { name: "YouTube", url: "" },
 ];
 
 export const ABOUT = {
-  intro: "Rawaj is a Pakistani home and clothing brand. We make the everyday things you live in — the kurta you wear to work, the blanket on your bed, the towel after a long day — and we make them properly.",
+  intro: "Velenzay is a Pakistani home and clothing brand. We make the everyday things you live in — the kurta you wear to work, the blanket on your bed, the towel after a long day — and we make them properly.",
   story: [
-    "Rawaj (رواج) means tradition, the things that quietly become part of everyday life. That's what we want our clothes and home essentials to be: the pieces you reach for every day, year after year.",
-    "Rawaj began with a simple frustration: good fabric was either too expensive or too hard to trust online. You couldn't feel the weight of a blanket through a screen, or know if a lawn suit would fade after two washes.",
+    "We chose the name Velenzay because it sounds the way we want our things to feel: soft, warm and quietly elegant. That's what we want our clothes and home essentials to be: the pieces you reach for every day, year after year.",
+    "Velenzay began with a simple frustration: good fabric was either too expensive or too hard to trust online. You couldn't feel the weight of a blanket through a screen, or know if a lawn suit would fade after two washes.",
     "So we built a store around honesty. Every product comes in clear qualities with real weights and fabric details, prices are fair and shown up front, and you pay only when the parcel is in your hands.",
-    "[Add your founding story: who started Rawaj, where, and why.]",
+    "[Add your founding story: who started Velenzay, where, and why.]",
   ],
   values: [
     { title: "Fabric first", text: "We choose cotton, lawn and fleece by feel and weight, then test every batch before it reaches you." },

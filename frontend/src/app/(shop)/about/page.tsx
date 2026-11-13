@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Seal } from "@/components/brand/logo";
+import { Mark } from "@/components/brand/logo";
 import { ChevronRight } from "@/components/ui/icons";
 import { ABOUT } from "@/content/company";
 
 export const metadata: Metadata = {
   title: "About us",
-  description: "Rawaj is a Pakistani clothing and home brand: honest fabric, fair prices and Cash on Delivery across Pakistan.",
+  description: "Velenzay is a Pakistani clothing and home brand: honest fabric, fair prices and Cash on Delivery across Pakistan.",
   alternates: { canonical: "/about" },
 };
 
@@ -18,7 +18,7 @@ export default function AboutPage() {
       <section className="relative isolate overflow-hidden bg-sand">
         <Image src="/hero/fabric-wide.jpg" alt="" fill priority sizes="100vw" className="-z-10 object-cover opacity-60" />
         <div className="mx-auto max-w-7xl px-4 py-20 md:py-32">
-          <p className="animate-rise text-[15px] font-semibold text-forest">About Rawaj</p>
+          <p className="animate-rise text-[15px] font-semibold text-forest">About Velenzay</p>
           <h1 className="mt-3 max-w-3xl animate-rise text-[clamp(40px,6vw,72px)] leading-[1.02] font-semibold tracking-[-0.035em] [animation-delay:60ms]">
             Made for the way Pakistan lives.
           </h1>
@@ -31,7 +31,7 @@ export default function AboutPage() {
           <Image src="/hero/fabric-tall.jpg" alt="Soft white fabric" fill sizes="(max-width: 768px) 100vw, 40vw" className="object-cover" />
         </div>
         <div>
-          <Seal size={88} className="mb-5" />
+          <Mark size={56} className="mb-5" />
           <h2 className="text-3xl font-semibold md:text-[40px]">Our story</h2>
           <div className="mt-5 flex flex-col gap-4 text-[17px] leading-relaxed text-body">
             {ABOUT.story.map((p) => (

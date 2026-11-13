@@ -11,7 +11,7 @@ export const TERMS: { id: string; title: string; body: string[] }[] = [
     id: "about",
     title: "1. About these terms",
     body: [
-      "These terms apply to every purchase made on rawaj.pk (the \"website\") and to your use of the website. The website is run by [Registered business name], [registered address], Pakistan (\"Rawaj\", \"we\", \"us\").",
+      "These terms apply to every purchase made on velenzay.com (the \"website\") and to your use of the website. The website is run by [Registered business name], [registered address], Pakistan (\"Velenzay\", \"we\", \"us\").",
       "By placing an order or creating an account, you agree to these terms. Please read them together with our Privacy policy, Returns & exchanges and Delivery information pages. If you do not agree, please do not use the website.",
       "We may update these terms from time to time. The version on the website when you place an order is the one that applies to that order.",
     ],
@@ -110,7 +110,7 @@ export const TERMS: { id: string; title: string; body: string[] }[] = [
     id: "ip",
     title: "12. Our content and brand",
     body: [
-      "The Rawaj name and logo, product designs, photos, text and the design of the website belong to us or our licensors. You may not copy, sell or use them for commercial purposes without our written permission.",
+      "The Velenzay name and logo, product designs, photos, text and the design of the website belong to us or our licensors. You may not copy, sell or use them for commercial purposes without our written permission.",
     ],
   },
   {
@@ -147,7 +147,7 @@ export const TERMS: { id: string; title: string; body: string[] }[] = [
     id: "contact",
     title: "17. Contact us",
     body: [
-      "Questions about these terms? Email [hello@rawaj.pk], WhatsApp [+92 3XX XXXXXXX], or use the Contact us page. [Registered business name], [registered address], Pakistan.",
+      "Questions about these terms? Email [hello@velenzay.com], WhatsApp [+92 3XX XXXXXXX], or use the Contact us page. [Registered business name], [registered address], Pakistan.",
     ],
   },
 ];

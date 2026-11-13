@@ -49,7 +49,7 @@ function MessageRow({ message: m }: { message: ContactMessage }) {
       )}
       <p className="text-[15px] leading-relaxed whitespace-pre-line text-body">{m.message}</p>
       <div className="flex flex-wrap gap-2">
-        <a href={`mailto:${m.email}?subject=${encodeURIComponent("Re: your message to Rawaj.pk")}`} className={buttonClass.secondary}>
+        <a href={`mailto:${m.email}?subject=${encodeURIComponent("Re: your message to Velenzay")}`} className={buttonClass.secondary}>
           Reply by email
         </a>
         {wa && (

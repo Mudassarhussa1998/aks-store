@@ -12,7 +12,7 @@ from app.core.config import settings
 log = logging.getLogger(__name__)
 _redis: Redis | None = Redis.from_url(settings.redis_url, decode_responses=True) if settings.redis_url else None
 
-PREFIX = "rawaj:"
+PREFIX = "velenzay:"
 
 
 async def cached(key: str, loader: Callable[[], Awaitable[Any]], ttl: int | None = None) -> Any:

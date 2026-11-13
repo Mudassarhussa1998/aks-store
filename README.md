@@ -1,4 +1,4 @@
-# Rawaj.pk
+# Velenzay
 
 Clothing and home essentials store for Pakistan, with Cash on Delivery.
 
@@ -64,7 +64,7 @@ Tests: `cd backend && uv run pytest`.
    - Email: create a free [Resend](https://resend.com) account, verify your domain, then set `EMAIL_PROVIDER=resend`, `RESEND_API_KEY` and `EMAIL_FROM` in `deploy/.env`.
    - SMS (optional): `SMS_PROVIDER=off` launches free, with email-only verification. For SMS, use a Pakistani bulk-SMS gateway with `SMS_PROVIDER=http` and its send link in `SMS_HTTP_URL` (`{to}` and `{text}` placeholders), or `SMS_PROVIDER=twilio`.
 5. **Continue with Google** (optional):
-   - In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), set up the OAuth consent screen (app name Rawaj.pk, your logo, support email), then create an **OAuth client ID** of type **Web application**.
+   - In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), set up the OAuth consent screen (app name Velenzay, your logo, support email), then create an **OAuth client ID** of type **Web application**.
    - Authorised redirect URI: `https://<your-domain>/auth/google/callback` (add `http://localhost:3000/auth/google/callback` for local testing).
    - Put the client id in both `deploy/.env` (`GOOGLE_CLIENT_ID`) and Vercel (`GOOGLE_CLIENT_ID`), and the secret only in Vercel (`GOOGLE_CLIENT_SECRET`).
    - New Google users are asked for their mobile number right after signing in.

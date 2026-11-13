@@ -61,7 +61,7 @@ def variants(code: str, sizes: dict[str, int], colors: list[str], qualities: dic
     out = []
     for (size, base), color, (quality, add) in combos(sizes.items(), colors, (qualities or {None: 0}).items()):
         price = base + add
-        sku = "-".join(x for x in ["RWJ", code, re.sub(r"[^A-Z0-9]", "", size.upper())[:6], color.replace(" ", "")[:4].upper(),
+        sku = "-".join(x for x in ["VLZ", code, re.sub(r"[^A-Z0-9]", "", size.upper())[:6], color.replace(" ", "")[:4].upper(),
                                    (quality or "")[:1].upper()] if x)
         out.append(Variant(
             sku=sku, size=size, color=color, color_hex=COLORS[color], quality=quality, price=price,
@@ -184,7 +184,7 @@ async def main(reset: bool) -> None:
             print("Database already has products; use --reset to start over.")
             return
 
-        admin = User(name="Rawaj Admin", email=os.getenv("SEED_ADMIN_EMAIL", "admin@rawaj.pk"),
+        admin = User(name="Velenzay Admin", email=os.getenv("SEED_ADMIN_EMAIL", "admin@velenzay.com"),
                      password_hash=hash_password(os.getenv("SEED_ADMIN_PASSWORD", "change-this-admin-password")),
                      is_admin=True)
         reviewers = [User(name=n, email=f"{n.split()[0].lower()}@example.com", phone=f"+92300000000{i}",

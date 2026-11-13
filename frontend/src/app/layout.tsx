@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Rawaj.pk — Clothing & Home Essentials in Pakistan", template: "%s · Rawaj.pk" },
+  title: { default: "Velenzay — Clothing & Home Essentials in Pakistan", template: "%s · Velenzay" },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   keywords: ["online shopping Pakistan", "lawn suits", "kurta", "shalwar kameez", "blankets", "towels", "pillows", "bedsheets", "Cash on Delivery"],
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "en_PK",
     url: "/",
-    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Rawaj.pk — Comfort for every home" }],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Velenzay — Comfort for every home" }],
   },
   twitter: { card: "summary_large_image", images: ["/og.jpg"] },
   icons: { icon: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png", sizes: "512x512" }], apple: "/apple-touch-icon.png" },

@@ -15,7 +15,7 @@ export function safeNext(value: string | null | undefined) {
 /** Short-lived cookie that carries this sign-in's state (and nonce/PKCE for Google) from redirect to callback. */
 export function pendingCookie(provider: string) {
   return {
-    name: `rawaj_oauth_${provider}`,
+    name: `velenzay_oauth_${provider}`,
     path: `/auth/${provider}`,
     options: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: `/auth/${provider}`, maxAge: 10 * 60 },
   };

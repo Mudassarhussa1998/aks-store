@@ -10,13 +10,13 @@ async def test_http_gateway_fills_number_and_message(monkeypatch):
     transport = httpx.MockTransport(lambda req: seen.append(req) or httpx.Response(200, text="OK"))
     monkeypatch.setattr(notify.httpx, "AsyncClient", lambda **kw: real_client(transport=transport, **kw))
     monkeypatch.setattr(settings, "sms_provider", "http")
-    monkeypatch.setattr(settings, "sms_http_url", "https://gw.example.pk/send?key=abc&to={to}&msg={text}&mask=Rawaj")
+    monkeypatch.setattr(settings, "sms_http_url", "https://gw.example.pk/send?key=abc&to={to}&msg={text}&mask=Velenzay")
 
     await notify.send_sms("+923001234567", "123456 is your code & more")
 
     (req,) = seen
     assert req.url.host == "gw.example.pk" and req.method == "GET"
-    assert dict(req.url.params) == {"key": "abc", "to": "923001234567", "msg": "123456 is your code & more", "mask": "Rawaj"}
+    assert dict(req.url.params) == {"key": "abc", "to": "923001234567", "msg": "123456 is your code & more", "mask": "Velenzay"}
 
 
 async def test_sms_off_hides_phone_verification(client, monkeypatch):

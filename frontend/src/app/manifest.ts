@@ -6,7 +6,7 @@ import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: `${SITE_NAME} — Clothing & Home Essentials`,
-    short_name: "Rawaj.pk",
+    short_name: "Velenzay",
     description: SITE_DESCRIPTION,
     start_url: "/",
     display: "standalone",

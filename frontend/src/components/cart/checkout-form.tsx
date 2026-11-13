@@ -13,7 +13,7 @@ import { useCart } from "./cart-store";
 import { SummaryRows } from "./order-summary";
 import { readCoupon, saveCoupon, useQuote } from "./use-quote";
 
-export const LAST_ORDER_KEY = "rawaj_last_order";
+export const LAST_ORDER_KEY = "velenzay_last_order";
 
 const input = "rounded border border-line-strong px-3 py-3 font-normal";
 const label = "flex flex-col gap-1.5 text-sm font-medium";

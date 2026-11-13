@@ -7,7 +7,7 @@ import type { Quote } from "@/lib/types";
 
 import { useCart } from "./cart-store";
 
-const COUPON_KEY = "rawaj_coupon";
+const COUPON_KEY = "velenzay_coupon";
 
 export function readCoupon() {
   try {

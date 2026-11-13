@@ -6,7 +6,7 @@ import { CAREERS, CONTACT } from "@/content/company";
 
 export const metadata: Metadata = {
   title: "Careers",
-  description: "Join the Rawaj.pk team in Lahore or remotely: customer care, warehouse and content roles.",
+  description: "Join the Velenzay team in Lahore or remotely: customer care, warehouse and content roles.",
   alternates: { canonical: "/careers" },
 };
 
@@ -14,7 +14,7 @@ export default function CareersPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 pt-12 pb-16 md:pt-20">
       <p className="text-[15px] font-semibold text-forest">Careers</p>
-      <h1 className="mt-3 max-w-3xl text-[clamp(36px,5vw,60px)] leading-[1.04] font-semibold tracking-[-0.03em]">Grow with Rawaj.</h1>
+      <h1 className="mt-3 max-w-3xl text-[clamp(36px,5vw,60px)] leading-[1.04] font-semibold tracking-[-0.03em]">Grow with Velenzay.</h1>
       <p className="mt-5 max-w-2xl text-lg leading-relaxed text-body">{CAREERS.intro}</p>
 
       <ul className="mt-10 grid gap-3 sm:grid-cols-2">

@@ -30,7 +30,7 @@ export function TrackForm() {
       >
         <label className="flex flex-col gap-1.5 text-sm font-medium">
           Order number
-          <input name="number" required placeholder="RWJ-XXXXXX" className="h-12 rounded-xl border border-line-strong px-3.5 font-normal uppercase outline-none focus:border-forest focus:ring-4 focus:ring-forest/10" />
+          <input name="number" required placeholder="VLZ-XXXXXX" className="h-12 rounded-xl border border-line-strong px-3.5 font-normal uppercase outline-none focus:border-forest focus:ring-4 focus:ring-forest/10" />
         </label>
         <label className="flex flex-col gap-1.5 text-sm font-medium">
           Mobile number

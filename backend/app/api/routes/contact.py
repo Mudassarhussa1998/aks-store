@@ -61,8 +61,8 @@ async def contact(data: schemas.ContactIn, db: DB, user: OptionalUser, tasks: Ba
     tasks.add_task(
         notify.send_email,
         msg.email,
-        "We've received your message · Rawaj.pk",
+        "We've received your message · Velenzay",
         f"Hi {msg.name.split()[0]},\n\nThanks for getting in touch about \"{subject.lower()}\". "
-        "Our team replies within one working day (Monday to Saturday).\n\nYour message:\n" + msg.message + "\n\n— Rawaj.pk",
+        "Our team replies within one working day (Monday to Saturday).\n\nYour message:\n" + msg.message + "\n\n— Velenzay",
     )
     return reply

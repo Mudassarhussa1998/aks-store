@@ -12,7 +12,7 @@ export function organizationJsonLd() {
       "@type": "Organization",
       name: SITE_NAME,
       url: SITE_URL,
-      logo: absolute("/brand/seal-512.png"),
+      logo: absolute("/brand/logo-512.png"),
       description: SITE_DESCRIPTION,
       areaServed: "PK",
       ...(SOCIAL.some((s) => s.url) && { sameAs: SOCIAL.filter((s) => s.url).map((s) => s.url) }),
@@ -73,7 +73,7 @@ export function productJsonLd(p: ProductDetail, reviews: Review[]) {
     url: absolute(`/p/${p.slug}`),
     sku: p.variants[0]?.sku,
     image: p.images.map((i) => `${i.url}-1080.webp`),
-    brand: { "@type": "Brand", name: "Rawaj" },
+    brand: { "@type": "Brand", name: "Velenzay" },
     category: p.breadcrumbs.map((c) => c.name).join(" > "),
     offers: {
       "@type": "AggregateOffer",

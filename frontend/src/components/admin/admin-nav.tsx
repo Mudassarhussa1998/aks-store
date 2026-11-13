@@ -7,7 +7,8 @@ import { createPortal } from "react-dom";
 
 import { logout } from "@/app/actions/auth";
 
-import { SealMark } from "../brand/logo";
+import { Mark } from "../brand/logo";
+
 import {
   BagIcon,
   ChatIcon,
@@ -56,10 +57,8 @@ const GROUPS: { title: string; items: Item[] }[] = [
 function Logo() {
   return (
     <Link href="/admin" className="flex items-center gap-2 px-3">
-      <SealMark size={28} />
-      <span className="text-lg font-semibold tracking-[0.06em]">
-        RAWAJ<span className="text-[11px] tracking-normal text-muted">.pk</span>
-      </span>
+      <Mark size={28} />
+      <span className="text-lg font-semibold tracking-[0.12em]">VELENZAY</span>
       <span className="rounded-full bg-forest px-2 py-0.5 text-[11px] font-medium text-white">Admin</span>
     </Link>
   );

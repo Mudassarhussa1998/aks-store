@@ -12,7 +12,7 @@ import { getCurrentUser } from "@/lib/session";
 
 export const metadata: Metadata = {
   title: "Contact us",
-  description: "Questions about an order, returns or our products? Message Rawaj.pk on WhatsApp or email. We reply within one working day.",
+  description: "Questions about an order, returns or our products? Message Velenzay on WhatsApp or email. We reply within one working day.",
   alternates: { canonical: "/contact" },
 };
 
@@ -26,7 +26,7 @@ export default function ContactPage({ searchParams }: { searchParams: Promise<Pa
           "@context": "https://schema.org",
           "@type": "ContactPage",
           url: `${SITE_URL}/contact`,
-          mainEntity: { "@type": "Organization", name: "Rawaj.pk", url: SITE_URL, contactPoint: [{ "@type": "ContactPoint", contactType: "customer service", areaServed: "PK", availableLanguage: ["en", "ur"] }] },
+          mainEntity: { "@type": "Organization", name: "Velenzay", url: SITE_URL, contactPoint: [{ "@type": "ContactPoint", contactType: "customer service", areaServed: "PK", availableLanguage: ["en", "ur"] }] },
         }}
       />
       <h1 className="text-[clamp(34px,5vw,56px)] leading-tight font-semibold tracking-[-0.03em]">Contact us</h1>

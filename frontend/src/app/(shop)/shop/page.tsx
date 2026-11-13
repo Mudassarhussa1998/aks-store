@@ -5,7 +5,7 @@ import { Listing, ListingSkeleton, parseQuery, type SearchParams } from "@/compo
 
 export const metadata: Metadata = {
   title: "Shop All Clothing & Home Essentials",
-  description: "Browse every Rawaj.pk product: lawn suits, kurtas, shoes, blankets, towels, pillows and curtains. Cash on Delivery across Pakistan.",
+  description: "Browse every Velenzay product: lawn suits, kurtas, shoes, blankets, towels, pillows and curtains. Cash on Delivery across Pakistan.",
   alternates: { canonical: "/shop" },
 };
 

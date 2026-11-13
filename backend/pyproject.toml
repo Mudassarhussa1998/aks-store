@@ -1,7 +1,7 @@
 [project]
-name = "rawaj-api"
+name = "velenzay-api"
 version = "0.1.0"
-description = "Rawaj.pk e-commerce API"
+description = "Velenzay e-commerce API"
 
 authors = [
     { name = "mudassarhussain", email = "mudassarhussa1998@gmail.com" }

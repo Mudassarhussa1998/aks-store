@@ -32,7 +32,7 @@ const PAGES: Record<string, { title: string; body: string[] }> = {
   "delete-your-data": {
     title: "Deleting your data",
     body: [
-      "You can delete your Rawaj.pk account and personal data at any time, including if you signed up with Google or Facebook.",
+      "You can delete your Velenzay account and personal data at any time, including if you signed up with Google or Facebook.",
       "Sign in, open My Account → Profile, and choose Delete account at the bottom of the page. Your profile, saved addresses, wishlist, browsing history, reviews and Google/Facebook sign-in links are removed straight away.",
       "Orders you placed are kept for delivery and accounting records, but are no longer linked to an account.",
       "If you can no longer sign in, contact us from the email or mobile number on your account and we'll delete it for you within 7 days. [Add your support contact.]",

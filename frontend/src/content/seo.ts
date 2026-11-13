@@ -7,14 +7,14 @@ export const CATEGORY_COPY: Record<string, { heading: string; paragraphs: string
   women: {
     heading: "Women's clothing online in Pakistan",
     paragraphs: [
-      "Shop lawn suits, embroidered 3-piece and 2-piece outfits, ready-to-wear kurtas and festive formals at Rawaj. Our lawn is soft and breathable for Pakistan's long summers, and our formals are finished with careful embroidery for weddings, Eid and dinners.",
+      "Shop lawn suits, embroidered 3-piece and 2-piece outfits, ready-to-wear kurtas and festive formals at Velenzay. Our lawn is soft and breathable for Pakistan's long summers, and our formals are finished with careful embroidery for weddings, Eid and dinners.",
       "Every outfit lists its fabric, what's included (shirt, trouser, dupatta) and its sizes, with prices shown for each option before you order. Pay in cash on delivery anywhere in Pakistan, and return or exchange unused items within 7 days.",
     ],
   },
   men: {
     heading: "Men's kurtas and shalwar kameez",
     paragraphs: [
-      "From everyday cotton shalwar kameez to printed linen kurtas, Rawaj menswear is cut for comfort and pressed for a clean look at work, at Friday prayers or at family events.",
+      "From everyday cotton shalwar kameez to printed linen kurtas, Velenzay menswear is cut for comfort and pressed for a clean look at work, at Friday prayers or at family events.",
       "Choose your size and colour, see the exact price straight away, and pay when it arrives. Delivery is free on orders over Rs 3,000 and takes 2–4 working days in major cities.",
     ],
   },

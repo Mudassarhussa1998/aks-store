@@ -39,32 +39,32 @@ def _message(o: dict) -> tuple[str, list[str], str]:
         "placed": (
             f"Order #{n} received",
             [f"Thank you, {o['name']}! We've received your order #{n}.", f"Total {total}, to pay in cash on delivery.", "We'll call you shortly to confirm it."],
-            f"Rawaj.pk: Order #{n} received ({total}, Cash on Delivery). We'll call to confirm. Track: {link}",
+            f"Velenzay: Order #{n} received ({total}, Cash on Delivery). We'll call to confirm. Track: {link}",
         ),
         "confirmed": (
             f"Order #{n} confirmed",
             [f"Good news, {o['name']}: order #{n} is confirmed and being packed.", "We'll let you know when it ships."],
-            f"Rawaj.pk: Order #{n} is confirmed and being packed.",
+            f"Velenzay: Order #{n} is confirmed and being packed.",
         ),
         "shipped": (
             f"Order #{n} is on its way",
             [f"Your order #{n} has shipped{ship}.{tracking}", f"Please keep {total} ready for the rider."],
-            f"Rawaj.pk: Order #{n} shipped{ship}.{tracking} Keep {total} ready. Track: {link}",
+            f"Velenzay: Order #{n} shipped{ship}.{tracking} Keep {total} ready. Track: {link}",
         ),
         "delivered": (
             f"Order #{n} delivered",
             [f"Your order #{n} has been delivered. We hope you love it!", "If you have a minute, rate your items from My Account → My orders."],
-            f"Rawaj.pk: Order #{n} delivered. Thank you for shopping with us!",
+            f"Velenzay: Order #{n} delivered. Thank you for shopping with us!",
         ),
         "cancelled": (
             f"Order #{n} cancelled",
             [f"Your order #{n} has been cancelled.", "If this wasn't expected, just reply to this email or message us on WhatsApp."],
-            f"Rawaj.pk: Order #{n} has been cancelled.",
+            f"Velenzay: Order #{n} has been cancelled.",
         ),
         "returned": (
             f"Return received for order #{n}",
             [f"We've received the return for order #{n}. Thank you for letting us know."],
-            f"Rawaj.pk: Return received for order #{n}.",
+            f"Velenzay: Return received for order #{n}.",
         ),
     }[o["event"]]
 
@@ -75,13 +75,13 @@ async def send(o: dict) -> None:
         items = "".join(f"<li>{escape(i)}</li>" for i in o["items"])
         paragraphs = "".join(f'<p style="font-size:16px;margin:0 0 12px">{escape(line)}</p>' for line in lines)
         html = f"""<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:auto;padding:24px;color:#1d1d1f">
-  <p style="margin:0 0 24px"><img src="{settings.site_url}/brand/seal-email.png" width="64" height="64" alt="Rawaj.pk" style="display:block;border:0"></p>
+  <p style="margin:0 0 24px"><img src="{settings.site_url}/brand/logo-email.png" width="240" height="56" alt="Velenzay" style="display:block;border:0"></p>
   {paragraphs}
   <ul style="font-size:14px;color:#4a4a4a;padding-left:18px;margin:16px 0">{items}</ul>
   <p style="margin:24px 0 0"><a href="{settings.site_url}/track" style="background:#1E3A34;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-size:15px">Track your order</a></p>
 </div>"""
         text = "\n".join([*lines, "", *o["items"], "", f"Track your order: {settings.site_url}/track"])
-        await notify.send_email(o["email"], f"{subject} · Rawaj.pk", text, html)
+        await notify.send_email(o["email"], f"{subject} · Velenzay", text, html)
     if settings.sms_enabled and o["event"] in settings.sms_order_events:
         try:
             phone = normalize_pk_phone(o["phone"])
