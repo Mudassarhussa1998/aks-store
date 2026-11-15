@@ -24,7 +24,21 @@ deploy/     docker-compose for the API server (Caddy gives automatic HTTPS)
 - Changing size, colour or quality only updates state in the browser. Prices, photos and stock change without a page reload.
 - Product photos are resized once, at upload. `next/image` uses a custom loader to pick the smallest width that fits.
 
-## Run locally
+## Run with Docker
+
+The easiest way: everything (storefront, API, Postgres, Redis) in one command. You only need Docker Desktop.
+
+```bash
+docker compose up -d --build     # store: http://localhost:3000, API docs: http://localhost:8000/docs
+docker compose exec api uv run --no-dev python seed.py   # first time: sample catalog + admin account
+docker compose logs -f api       # verification codes appear here while EMAIL/SMS are "console"
+docker compose down              # stop (data is kept in the pgdata volume)
+```
+
+Keys and settings are read from `backend/.env` and `frontend/.env.local` if they exist. The storefront is built
+when its container first starts (the build reads the catalog from the API), so the first start takes about a minute.
+
+## Run locally without Docker
 
 You need Postgres and Redis running locally, plus `uv` and Node 20+.
 
@@ -32,7 +46,7 @@ You need Postgres and Redis running locally, plus `uv` and Node 20+.
 # API (http://localhost:8000, docs at /docs)
 cd backend
 cp .env.example .env            # set JWT_SECRET
-createdb aks && createdb aks_test
+createdb velenzay && createdb velenzay_test
 uv run alembic upgrade head
 uv run python seed.py           # sample catalog + admin from SEED_ADMIN_* in .env
 uv run uvicorn app.main:app --reload

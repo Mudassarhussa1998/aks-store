@@ -1,0 +1,61 @@
+# The whole store on one machine: storefront, API, Postgres and Redis.
+#
+#   docker compose up -d --build        # first run takes a few minutes
+#   open http://localhost:3000          # API docs: http://localhost:8000/docs
+#   docker compose exec api uv run --no-dev python seed.py   # optional sample products + admin account
+#
+# Secrets and provider keys come from backend/.env and frontend/.env.local (both optional here).
+# For the live API server, use deploy/docker-compose.yml instead.
+
+name: velenzay
+
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: velenzay
+      POSTGRES_PASSWORD: velenzay
+      POSTGRES_DB: velenzay
+    volumes: [pgdata:/var/lib/postgresql]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U velenzay"]
+      interval: 3s
+      retries: 20
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+
+  api:
+    build: ./backend
+    env_file: [{ path: backend/.env, required: false }]
+    environment:
+      ENV: development
+      DATABASE_URL: postgresql+asyncpg://velenzay:velenzay@db/velenzay
+      REDIS_URL: redis://redis:6379/0
+      CORS_ORIGINS: '["http://localhost:3000"]'
+      MEDIA_BASE_URL: http://localhost:8000/media
+      SITE_URL: http://localhost:3000
+      WEB_WORKERS: 1
+    volumes: ["./backend/media:/app/media"]
+    ports: ["8000:8000"]
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_started }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/categories')"]
+      interval: 3s
+      retries: 40
+
+  web:
+    build: ./frontend
+    env_file: [{ path: frontend/.env.local, required: false }]
+    environment:
+      API_URL: http://api:8000/api/v1
+      SITE_URL: http://localhost:3000
+    ports: ["3000:3000"]
+    depends_on:
+      api: { condition: service_healthy }
+
+volumes:
+  pgdata:

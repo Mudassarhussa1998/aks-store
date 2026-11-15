@@ -1,6 +1,6 @@
 import os
 
-os.environ["DATABASE_URL"] = os.getenv("TEST_DATABASE_URL", "postgresql+asyncpg://localhost/aks_test")
+os.environ["DATABASE_URL"] = os.getenv("TEST_DATABASE_URL", "postgresql+asyncpg://localhost/velenzay_test")
 os.environ["REDIS_URL"] = ""  # no cache in tests: every assertion should see fresh data
 
 import pytest  # noqa: E402

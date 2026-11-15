@@ -19,12 +19,12 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:17
+    image: postgres:18
     environment:
       POSTGRES_USER: velenzay
       POSTGRES_DB: velenzay
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes: [pgdata:/var/lib/postgresql/data]
+    volumes: [pgdata:/var/lib/postgresql]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U velenzay"]
       interval: 5s
@@ -32,7 +32,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:7-alpine
+    image: redis:8-alpine
     command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
     restart: unless-stopped
 
