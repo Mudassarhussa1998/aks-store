@@ -6,6 +6,7 @@ app created for this sign-in, so a token can't be forged, reused from another ap
 """
 
 import asyncio
+from urllib.parse import urlsplit
 
 import jwt
 from fastapi import HTTPException, status
@@ -19,6 +20,17 @@ ISSUERS = ("https://accounts.google.com", "accounts.google.com")
 def _decode(token: str) -> dict:
     key = _jwks.get_signing_key_from_jwt(token)
     return jwt.decode(token, key.key, algorithms=["RS256"], audience=settings.google_client_id, issuer=ISSUERS)
+
+
+def photo_url(claims: dict) -> str | None:
+    """The account's profile photo, only if it is an https link on Google's own photo servers."""
+    url = claims.get("picture")
+    if not isinstance(url, str) or len(url) > 500:
+        return None
+    host = urlsplit(url).hostname or ""
+    if urlsplit(url).scheme != "https" or not (host == "googleusercontent.com" or host.endswith(".googleusercontent.com")):
+        return None
+    return url
 
 
 async def verify_id_token(token: str, nonce: str) -> dict:

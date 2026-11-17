@@ -18,6 +18,7 @@ from sqlalchemy import (
     UniqueConstraint,
     func,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db import Base
@@ -44,6 +45,7 @@ class User(TimestampMixin, Base):
     gender: Mapped[str | None] = mapped_column(String(10))
     date_of_birth: Mapped[date | None] = mapped_column(Date)
     city: Mapped[str | None] = mapped_column(String(80))
+    avatar_url: Mapped[str | None] = mapped_column(String(500))  # profile photo from Google, refreshed at each sign-in
 
     addresses: Mapped[list["Address"]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
@@ -266,6 +268,56 @@ class Coupon(TimestampMixin, Base):
     min_subtotal: Mapped[int] = mapped_column(Integer, default=0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class AssistantConversation(Base):
+    """One chat with the shopping assistant. The id is a long random secret: guests are identified by it alone.
+
+    A conversation belongs to exactly one signed-in user, or to nobody (a guest). The API never lets a
+    conversation be continued by anyone else, so its messages and pending actions can't leak.
+    """
+
+    __tablename__ = "assistant_conversations"
+    __table_args__ = (Index("ix_assistant_conversations_user_updated", "user_id", "updated_at"),)
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    turns: Mapped[int] = mapped_column(Integer, default=0)
+    # An action waiting for the customer's "yes" on their next message, e.g. {"type": "cancel", "order": ..., "turn": 3}.
+    pending_action: Mapped[dict | None] = mapped_column(JSONB)
+    # A guest's question that needs an account ("where is my order?"). After they sign in in the same browser,
+    # it is handed to their account's chat once and answered there.
+    pending_prompt: Mapped[str | None] = mapped_column(Text)
+    pending_prompt_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    messages: Mapped[list["AssistantMessage"]] = relationship(
+        back_populates="conversation", cascade="all, delete-orphan", order_by="AssistantMessage.id"
+    )
+
+
+class AssistantMessage(Base):
+    __tablename__ = "assistant_messages"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    conversation_id: Mapped[str] = mapped_column(ForeignKey("assistant_conversations.id", ondelete="CASCADE"), index=True)
+    role: Mapped[str] = mapped_column(String(10))  # user | assistant
+    content: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    conversation: Mapped[AssistantConversation] = relationship(back_populates="messages")
+
+
+class AssistantMemory(Base):
+    """A fact a signed-in customer asked the assistant to remember (e.g. "prefers King size")."""
+
+    __tablename__ = "assistant_memories"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    fact: Mapped[str] = mapped_column(String(300))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class OrderStatus(enum.StrEnum):

@@ -57,6 +57,13 @@ class Settings(BaseSettings):
     facebook_app_id: str | None = None
     facebook_app_secret: str | None = None
 
+    # AI shopping assistant (Gemini). The chat endpoint answers 503 until GEMINI_API_KEY is set.
+    gemini_api_key: str | None = None
+    assistant_model: str = "gemini-3.8-flash"
+    assistant_thinking_level: str = "low"  # low | medium | high
+    assistant_messages_per_10_min: int = 30
+    assistant_history_messages: int = 20  # earlier messages sent to the model with each question
+
     # Order updates: every status change is emailed; SMS (paid) only for these events.
     sms_order_events: list[str] = ["placed", "shipped"]
     site_url: str = "http://localhost:3000"

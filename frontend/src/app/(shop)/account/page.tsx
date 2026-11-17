@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import { logout } from "@/app/actions/auth";
 import { AddressBook } from "@/components/account/address-book";
+import { Avatar } from "@/components/account/avatar";
 import { MyReviews } from "@/components/account/my-reviews";
 import { ProfileForm } from "@/components/account/profile-form";
 import { StatusBadge } from "@/components/order/order-details";
@@ -75,9 +76,7 @@ async function Account({ tab, reset }: { tab: Tab; reset: boolean }) {
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
         <aside className="lg:sticky lg:top-24 lg:w-64 lg:shrink-0">
           <div className="mb-3 hidden items-center gap-3 rounded-2xl bg-mist p-4 lg:flex">
-            <span aria-hidden className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest text-[15px] font-semibold text-white">
-              {initials(user.name)}
-            </span>
+            <Avatar name={user.name} src={user.avatar_url} size={44} />
             <span className="min-w-0">
               <span className="block truncate text-[15px] font-semibold">{user.name}</span>
               <span className="block truncate text-[13px] text-muted">{user.email}</span>
@@ -189,14 +188,6 @@ async function TabContent({ tab, token, user, reset }: { tab: Tab; token: string
         </>
       );
   }
-}
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
 }
 
 function Empty({ text }: { text: string }) {

@@ -112,3 +112,26 @@ async def test_google_only_user_can_delete_account_without_password(client):
     r = await client.post(f"{API}/delete-account", headers=headers, json={})
     assert r.status_code == 204
     assert (await sign_in(client, id_token())).json()["is_new"] is True  # the link went with the account
+
+
+async def test_google_photo_is_saved_and_refreshed(client):
+    photo = "https://lh3.googleusercontent.com/a/zara-photo=s96-c"
+    r = await sign_in(client, id_token(picture=photo))
+    me = await client.get(f"{API}/me", headers={"Authorization": f"Bearer {r.json()['access_token']}"})
+    assert me.json()["avatar_url"] == photo
+
+    newer = "https://lh3.googleusercontent.com/a/zara-new-photo=s96-c"
+    r = await sign_in(client, id_token(picture=newer))
+    me = await client.get(f"{API}/me", headers={"Authorization": f"Bearer {r.json()['access_token']}"})
+    assert me.json()["avatar_url"] == newer
+
+
+@pytest.mark.parametrize("url", [
+    "http://lh3.googleusercontent.com/a/photo",  # not https
+    "https://evil.example.com/photo.png",  # not Google's photo servers
+    "https://googleusercontent.com.evil.com/x",  # look-alike host
+    "javascript:alert(1)",
+    None,
+])
+def test_only_google_photo_links_are_accepted(url):
+    assert google.photo_url({"picture": url}) is None

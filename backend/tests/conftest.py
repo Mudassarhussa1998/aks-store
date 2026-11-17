@@ -2,6 +2,9 @@ import os
 
 os.environ["DATABASE_URL"] = os.getenv("TEST_DATABASE_URL", "postgresql+asyncpg://localhost/velenzay_test")
 os.environ["REDIS_URL"] = ""  # no cache in tests: every assertion should see fresh data
+# Tests read codes from the console outbox, whatever backend/.env says (e.g. SMS_PROVIDER=off or resend).
+os.environ["SMS_PROVIDER"] = "console"
+os.environ["EMAIL_PROVIDER"] = "console"
 
 import pytest  # noqa: E402
 from httpx import ASGITransport, AsyncClient  # noqa: E402
@@ -28,7 +31,7 @@ async def database():
 async def data():
     async with SessionLocal() as db:
         await db.execute(text(
-            "TRUNCATE order_events, order_items, orders, reviews, wishlist_items, recently_viewed, product_images, "
+            "TRUNCATE assistant_messages, assistant_conversations, assistant_memories, order_events, order_items, orders, reviews, wishlist_items, recently_viewed, product_images, "
             "variants, products, categories, coupons, addresses, users RESTART IDENTITY CASCADE"))
         home = Category(slug="home-living", name="Home & Living")
         blankets = Category(slug="blankets", name="Blankets", parent=home)

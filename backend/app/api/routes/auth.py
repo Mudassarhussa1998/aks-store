@@ -81,7 +81,9 @@ async def login(data: schemas.LoginIn, db: DB):
     return _token(user)
 
 
-async def _oauth_sign_in(db: DB, provider: str, subject: str, email: str, name: str | None) -> schemas.OAuthTokenOut:
+async def _oauth_sign_in(
+    db: DB, provider: str, subject: str, email: str, name: str | None, avatar_url: str | None = None
+) -> schemas.OAuthTokenOut:
     """Sign in (or up) with an account from another provider whose email address it has confirmed."""
     email = email.lower()
     is_new = False
@@ -106,6 +108,8 @@ async def _oauth_sign_in(db: DB, provider: str, subject: str, email: str, name: 
         db.add(OAuthAccount(user_id=user.id, provider=provider, subject=subject, email=email))
     if not user.email_verified:
         user.email_verified_at = datetime.now(UTC)
+    if avatar_url:
+        user.avatar_url = avatar_url  # people change their photo, so take the current one each time
     await db.commit()
     await db.refresh(user)
     return schemas.OAuthTokenOut(**_token(user).model_dump(), is_new=is_new, needs_phone=user.phone is None)
@@ -114,7 +118,7 @@ async def _oauth_sign_in(db: DB, provider: str, subject: str, email: str, name: 
 @router.post("/oauth/google", response_model=schemas.OAuthTokenOut)
 async def google_sign_in(data: schemas.GoogleSignInIn, db: DB):
     claims = await google.verify_id_token(data.id_token, data.nonce)
-    return await _oauth_sign_in(db, "google", claims["sub"], claims["email"], claims.get("name"))
+    return await _oauth_sign_in(db, "google", claims["sub"], claims["email"], claims.get("name"), google.photo_url(claims))
 
 
 @router.post("/oauth/facebook", response_model=schemas.OAuthTokenOut)

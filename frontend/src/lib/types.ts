@@ -15,6 +15,8 @@ export type User = {
   gender: "female" | "male" | "other" | null;
   date_of_birth: string | null;
   city: string | null;
+  /** Google profile photo, if they signed in with Google. */
+  avatar_url: string | null;
   created_at: string;
 };
 

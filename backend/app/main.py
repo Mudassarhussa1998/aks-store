@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api.routes import account, admin, auth, catalog, contact, orders
+from app.api.routes import account, admin, assistant, auth, catalog, contact, orders
 from app.core.config import settings
 
 app = FastAPI(title="Velenzay API", version="0.1.0", docs_url="/docs" if settings.env != "production" else None)
@@ -24,7 +24,7 @@ if settings.env == "production" and "console" in (settings.email_provider, setti
     logging.getLogger("velenzay").warning("EMAIL_PROVIDER/SMS_PROVIDER is 'console': verification codes are only written to the log (use SMS_PROVIDER=off to skip SMS).")
 
 api = APIRouter(prefix="/api/v1")
-for module in (auth, catalog, orders, account, contact, admin):
+for module in (auth, catalog, orders, account, contact, admin, assistant):
     api.include_router(module.router)
 app.include_router(api)
 

@@ -55,6 +55,7 @@ class UserOut(ORM):
     gender: str | None
     date_of_birth: date | None
     city: str | None
+    avatar_url: str | None
     created_at: datetime
 
     @computed_field
@@ -569,3 +570,39 @@ class Stats(BaseModel):
     customers: int
     pending_reviews: int
     unread_messages: int = 0
+
+
+# ---------- shopping assistant ----------
+
+
+class AssistantChatIn(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+    conversation_id: str | None = Field(default=None, max_length=64)
+    cart: list[CartLineIn] = Field(default_factory=list, max_length=50)  # the shopper's browser cart
+
+
+class AssistantMessageOut(ORM):
+    role: str
+    content: str
+    created_at: datetime
+
+
+class AssistantReply(BaseModel):
+    conversation_id: str
+    reply: str
+    # Instructions for the chat widget: {"type": "add_to_cart", "item": {...}}, {"type": "clear_cart"},
+    # {"type": "sign_in_required", "reason": "..."}, {"type": "stock_changed"}.
+    actions: list[dict] = []
+
+
+class AssistantConversationOut(BaseModel):
+    conversation_id: str | None
+    signed_in: bool
+    messages: list[AssistantMessageOut]
+    resume_prompt: str | None = None  # a guest's question to answer now that they've signed in
+
+
+class AssistantMemoryOut(ORM):
+    id: int
+    fact: str
+    created_at: datetime

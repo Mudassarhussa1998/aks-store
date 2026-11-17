@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { getCategories } from "@/lib/catalog";
 import { getCurrentUser } from "@/lib/session";
 
+import { Avatar } from "../account/avatar";
 import { Logo } from "../brand/logo";
 import { HeartIcon, UserIcon } from "../ui/icons";
 import { CartButton } from "./cart-button";
@@ -48,10 +49,10 @@ export async function Header() {
 
 async function AccountLinksForUser() {
   const user = await getCurrentUser();
-  return <AccountLinks signedIn={!!user} isAdmin={!!user?.is_admin} />;
+  return <AccountLinks signedIn={!!user} isAdmin={!!user?.is_admin} name={user?.name} avatar={user?.avatar_url} />;
 }
 
-function AccountLinks({ signedIn, isAdmin }: { signedIn: boolean; isAdmin?: boolean }) {
+function AccountLinks({ signedIn, isAdmin, name, avatar }: { signedIn: boolean; isAdmin?: boolean; name?: string; avatar?: string | null }) {
   const iconLink = "flex h-11 w-11 items-center justify-center rounded-full hover:bg-mist";
   return (
     <>
@@ -64,7 +65,7 @@ function AccountLinks({ signedIn, isAdmin }: { signedIn: boolean; isAdmin?: bool
         <HeartIcon />
       </Link>
       <Link href={signedIn ? "/account" : "/login"} aria-label={signedIn ? "My account" : "Sign in"} className={iconLink}>
-        <UserIcon />
+        {signedIn && avatar && name ? <Avatar name={name} src={avatar} size={30} /> : <UserIcon />}
       </Link>
     </>
   );

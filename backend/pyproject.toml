@@ -12,6 +12,7 @@ dependencies = [
     "asyncpg>=0.32.0",
     "boto3>=1.43.126",
     "fastapi[standard]>=0.115",
+    "google-genai>=1.50",
     "pillow>=13.0.0",
     "pwdlib[argon2]>=0.3.1",
     "pydantic-settings>=2.6",
